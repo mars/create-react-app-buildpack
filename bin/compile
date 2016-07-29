@@ -12,6 +12,9 @@ function indent() {
   esac
 }
 
+dir=$(mktemp -t buildpackXXXXX)
+rm -rf $dir
+
 url=https://github.com/heroku/heroku-buildpack-multi.git
 branch=""
 
