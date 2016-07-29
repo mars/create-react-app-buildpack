@@ -56,19 +56,10 @@ framework=$($dir/bin/detect $1)
 
 if [ $? == 0 ]; then
   echo "=====> Detected Framework: $framework"
-  $dir/bin/compile $1 $2 $3
+  $dir/bin/compile $BUILD_DIR $CACHE_DIR $ENV_DIR
 
   if [ $? != 0 ]; then
     exit 1
-  fi
-
-  # check if the buildpack left behind an environment for subsequent ones
-  if [ -e $dir/export ]; then
-    source $dir/export
-  fi
-
-  if [ -x $dir/bin/release ]; then
-    $dir/bin/release $1 > $1/last_pack_release.out
   fi
 else
   echo "create-react-app `.buildpacks` not defined. Exiting."
