@@ -55,3 +55,15 @@ heroku open
 Work with your app locally using `npm start`. See: [create-react-app docs](https://github.com/facebookincubator/create-react-app#getting-started)
 
 Then, commit & deploy ♻️
+
+
+Customization
+-------------
+
+The web server may be [configured via the static buildpack](https://github.com/heroku/heroku-buildpack-static#configuration).
+
+The default config, if `static.json` does not already exist, is:
+
+```json
+{ "root": "build/" }
+```
