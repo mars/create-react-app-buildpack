@@ -61,6 +61,15 @@ if [ $? == 0 ]; then
   if [ $? != 0 ]; then
     exit 1
   fi
+
+  # check if the buildpack left behind an environment for subsequent ones
+  if [ -e $dir/export ]; then
+    source $dir/export
+  fi
+
+  if [ -x $dir/bin/release ]; then
+    $dir/bin/release $1 > $1/last_pack_release.out
+  fi
 else
   echo "create-react-app `.buildpacks` not defined. Exiting."
   exit 1
