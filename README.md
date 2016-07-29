@@ -67,3 +67,7 @@ The default config, if `static.json` does not already exist, is:
 ```json
 { "root": "build/" }
 ```
+
+### Router Push State
+
+To support clean URLs with React Router (not included), configure with [HTML5 Push State](https://gist.github.com/hone/24b06869b4c1eca701f9#html5-push-state) from **Getting Started with Single Page Apps on Heroku**.
