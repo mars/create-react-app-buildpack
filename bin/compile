@@ -8,7 +8,7 @@ set -o pipefail
 # Fail on undeclared variables.
 set -u
 # Debug, echo every command
-set -x
+#set -x
 
 function indent() {
   c='s/^/       /'
@@ -49,8 +49,7 @@ if [ "$branch" != "" ]; then
   git checkout $branch >/dev/null 2>&1
 fi
 
-# we'll get errors later if these are needed and don't exist
-chmod -f +x $dir/bin/{detect,compile,release} || true
+chmod -f +x $dir/bin/{detect,compile,release}
 
 framework=$($dir/bin/detect $1)
 
