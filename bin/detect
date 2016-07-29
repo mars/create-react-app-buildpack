@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# bin/detect <build-dir>
+
+if [ -f $1/.buildpacks ]; then
+  echo "create-react-app Multipack"
+  exit 0
+else
+  echo "no .buildpacks file"
+  exit 1
+fi

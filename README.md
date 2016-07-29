@@ -36,10 +36,9 @@ Requires the [command-line tools](https://toolbelt.heroku.com) & [a free account
 heroku create -b https://github.com/mars/create-react-app-buildpack.git
 ```
 
-### Build, commit, & deploy ♻️
+### Commit & deploy ♻️
 
 ```bash
-npm run build
 git add .
 git commit -m "react-create-app on Heroku"
 git push heroku master
@@ -55,4 +54,4 @@ heroku open
 
 Work with your app locally using `npm start`. See: [create-react-app docs](https://github.com/facebookincubator/create-react-app#getting-started)
 
-Then build, commit, & deploy ♻️
+Then, commit & deploy ♻️
