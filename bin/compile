@@ -31,6 +31,10 @@ branch=""
 dir=$(mktemp -t buildpackXXXXX)
 rm -rf $dir
 
+# Set env vars for the inner buildpacks in `.buildpacks`
+# * Install `npm build` tooling.
+export NPM_CONFIG_PRODUCTION=false
+
 echo "=====> Downloading Buildpack: $url"
 
 if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then
