@@ -1,0 +1,3 @@
+https://github.com/heroku/heroku-buildpack-nodejs.git
+https://github.com/mars/create-react-app-inner-buildpack.git#v1.0.0
+https://github.com/heroku/heroku-buildpack-static.git
