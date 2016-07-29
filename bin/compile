@@ -23,13 +23,13 @@ CACHE_DIR=$2
 ENV_DIR=$3
 BP_DIR=`cd $(dirname $0); cd ..; pwd`
 
-dir=$(mktemp -t buildpackXXXXX)
-rm -rf $dir
-
+# Use architecture of multi-buildpack to compose behavior.
+# https://github.com/heroku/heroku-buildpack-multi
 cp $BP_DIR/.buildpacks $BUILD_DIR/.buildpacks
-
 url=https://github.com/heroku/heroku-buildpack-multi.git
 branch=""
+dir=$(mktemp -t buildpackXXXXX)
+rm -rf $dir
 
 echo "=====> Downloading Buildpack: $url"
 
@@ -58,6 +58,6 @@ if [ $? == 0 ]; then
     exit 1
   fi
 else
-  echo "create-react-app buildpacks not defined. Exiting."
+  echo "create-react-app `.buildpacks` not defined. Exiting."
   exit 1
 fi
