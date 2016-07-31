@@ -3,7 +3,7 @@ Heroku Buildpack for create-react-app
 
 Deploy React.js web apps generated with [create-react-app](https://github.com/facebookincubator/create-react-app).
 
-> Automates deployment with the built-in tooling and serves it up via [Nginx](https://www.nginx.com).
+> Automates deployment with the built-in tooling and serves it up via [Nginx](http://nginx.org/en/).
 
 Requires
 --------
@@ -85,5 +85,5 @@ This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpac
   * generates the [default `static.json`](#customization)
   * performs the production build for create-react-app, `npm run build`
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
-  * [Nginx](https://www.nginx.com) web server
+  * [Nginx](http://nginx.org/en/) web server
   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
