@@ -71,3 +71,19 @@ The default config, if `static.json` does not already exist, is:
 ### Router Push State
 
 To support clean URLs with React Router (not included), configure with [HTML5 Push State](https://gist.github.com/hone/24b06869b4c1eca701f9#html5-push-state) from **Getting Started with Single Page Apps on Heroku**.
+
+
+Architecture 🏙
+------------
+
+This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
+
+1. [`heroku/nodejs` buildpack](https://github.com/heroku/heroku-buildpack-nodejs)
+  * complete Node.js enviroment to support the webpack build
+  * `node_modules` cached between deployments
+2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
+  * generates the [default `static.json`](#customization)
+  * performs the production build for create-react-app, `npm run build`
+3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
+  * [Nginx](https://www.nginx.com) web server
+  * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
