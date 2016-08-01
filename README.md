@@ -8,6 +8,10 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
 Requires
 --------
 
+* [Heroku](https://www.heroku.com/home)
+  * [command-line tools (CLI)](https://toolbelt.heroku.com)
+  * [a free account](https://signup.heroku.com)
+* [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 * [Node.js](https://nodejs.org)
 * [create-react-app](https://github.com/facebookincubator/create-react-app)
   * `npm install -g create-react-app`
@@ -29,8 +33,6 @@ git init
 ```
 
 ### Create the Heroku app
-
-Requires the [command-line tools](https://toolbelt.heroku.com) & [a free account](https://signup.heroku.com) from Heroku.
 
 ```bash
 heroku create -b https://github.com/mars/create-react-app-buildpack.git
