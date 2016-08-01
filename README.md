@@ -44,10 +44,16 @@ git commit -m "react-create-app on Heroku"
 git push heroku master
 ```
 
-### Visit the live React app in your browser
+### Visit the app's public URL in your browser
 
 ```bash
 heroku open
+```
+
+### Visit the Heroku Dashboard for the app
+
+```bash
+heroku browse
 ```
 
 ### Continue Development
