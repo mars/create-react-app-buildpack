@@ -70,15 +70,27 @@ Customization
 
 The web server may be [configured via the static buildpack](https://github.com/heroku/heroku-buildpack-static#configuration).
 
-The default config, if `static.json` does not already exist, is:
+The default `static.json`, if it does not exist in the repo, is:
 
 ```json
 { "root": "build/" }
 ```
 
-### Router Push State
+### Routing clean URLs
 
-To support clean URLs with React Router (not included), configure with [HTML5 Push State](https://gist.github.com/hone/24b06869b4c1eca701f9#html5-push-state) from **Getting Started with Single Page Apps on Heroku**.
+By default, [React Router](https://github.com/reactjs/react-router) (not included) uses hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
+
+Create a `static.json` file to configure the web server for clean [`browserHistory` URLs with React Router](https://github.com/reactjs/react-router/blob/master/docs/guides/Histories.md#browserhistory):
+
+```json
+{
+  "root": "build/",
+  "clean_urls": false,
+  "routes": {
+    "/**": "index.html"
+  }
+}
+```
 
 
 Architecture 🏙
