@@ -92,6 +92,19 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 }
 ```
 
+Version compatibility
+---------------------
+
+We'll keep branches to maintain compatibility as `create-react-app` evolves. These will only be useful for projects that have been ejected and therefore stagnate with the tooling of a specific version.
+
+Currently, using branch `cra-0.2.x` will ensure that your deployment continues to work with 0.2.x versions of `create-react-app`.
+
+```bash
+heroku create -b https://github.com/mars/create-react-app-buildpack.git#cra-0.2.x
+```
+
+Usually, using master [as directed in the main instructions](#create-the-heroku-app) will be appropriate to automatically keep up with the newest `create-react-app`.
+
 
 Architecture 🏙
 ------------
