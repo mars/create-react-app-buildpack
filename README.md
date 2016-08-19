@@ -32,11 +32,21 @@ cd my-app
 git init
 ```
 
+At this point, this new repo is local, only on your computer. Eventually, you may want to [push to Github](#push-to-github).
+
 ### Create the Heroku app
 
 ```bash
-heroku create -b https://github.com/mars/create-react-app-buildpack.git
+heroku create my-app-name --buildpack https://github.com/mars/create-react-app-buildpack.git
 ```
+
+✏️ *Replace `my-app-name` with a name for your unique app.*
+
+This command:
+
+* sets the [app name](https://devcenter.heroku.com/articles/creating-apps#creating-a-named-app) & its URL `https://my-app-name.herokuapp.com`
+* sets the [buildpack](https://devcenter.heroku.com/articles/buildpacks) to deploy a `create-react-app` app
+* configures the [`heroku` remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) in the local git repo, so `git push heroku master` will push to this new Heroku app.
 
 ### Commit & deploy ♻️
 
@@ -54,15 +64,17 @@ heroku open
 
 ### Visit the Heroku Dashboard for the app
 
-```bash
-heroku browse
-```
+Find the app on [your dashboard](https://dashboard.heroku.com).
 
 ### Continue Development
 
 Work with your app locally using `npm start`. See: [create-react-app docs](https://github.com/facebookincubator/create-react-app#getting-started)
 
 Then, commit & deploy ♻️
+
+### Push to Github
+
+Eventually, to share, collaborate, or simply back-up your code, [create an empty repo at Github](https://github.com/new), and then follow the instructions shown on the repo to **push an existing repository from the command line**.
 
 
 Customization
