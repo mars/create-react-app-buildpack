@@ -132,3 +132,13 @@ This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpac
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
   * [Nginx](http://nginx.org/en/) web server
   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
+
+
+### General-purpose SPA deployment
+
+[Some kind feedback](https://github.com/mars/create-react-app-buildpack/issues/2) pointed out that this buildpack is not necessarily specific to `create-react-app`.
+
+This buildpack can deploy any SPA [single-page app] as long as it meets the following requirements:
+
+* `npm run build` performs the transpile/bundling
+* the file `build/index.html` or [the root specified in `static.json`](#customization) exists at runtime.
