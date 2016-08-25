@@ -80,6 +80,8 @@ Eventually, to share, collaborate, or simply back-up your code, [create an empty
 Customization
 -------------
 
+### Web server
+
 The web server may be [configured via the static buildpack](https://github.com/heroku/heroku-buildpack-static#configuration).
 
 The default `static.json`, if it does not exist in the repo, is:
@@ -88,7 +90,7 @@ The default `static.json`, if it does not exist in the repo, is:
 { "root": "build/" }
 ```
 
-### Routing clean URLs
+#### Routing clean URLs
 
 By default, [React Router](https://github.com/reactjs/react-router) (not included) uses hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
 
@@ -102,6 +104,23 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
     "/**": "index.html"
   }
 }
+```
+
+### Environment variables
+
+`REACT_APP_*` [custom environment variables](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) are supported on Heroku.
+
+Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
+
+```bash
+heroku config:set REACT_APP_HELLO='I love sushi!'
+```
+
+♻️ The app must be re-deployed for this change to take effect, because the normal app restart does not rebuild the React app with the new values.
+
+```bash
+git commit --allow-empty -m "Set REACT_APP_HELLO config var"
+git push heroku master
 ```
 
 Version compatibility
