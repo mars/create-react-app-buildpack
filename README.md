@@ -108,7 +108,7 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 
 ### Environment variables
 
-`REACT_APP_*` [custom environment variables](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) are supported on Heroku.
+[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) and [`NODE_*`](https://github.com/facebookincubator/create-react-app/pull/476) environment variables are supported on Heroku during the compile phase, when `npm run build` is executed to generate the JavaScript bundle.
 
 Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
 
@@ -116,7 +116,7 @@ Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-v
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-♻️ The app must be re-deployed for this change to take effect, because the normal app restart does not rebuild the React app with the new values.
+♻️ The app must be re-deployed for this change to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
 
 ```bash
 git commit --allow-empty -m "Set REACT_APP_HELLO config var"
