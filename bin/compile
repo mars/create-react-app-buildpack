@@ -84,7 +84,8 @@ if [ 'true' == "${REACT_APP_STATEFUL_BUILD-false}" ]; then
   echo '=====> Stateful build, now generating the JavaScript bundle'
   echo '       NOTICE: `REACT_APP_*` config vars will be compiled into'
   echo '       the slug. To update their values, push a new deployment.'
-  $BUILD_DIR/.heroku/node/bin/npm run build
+  cd $BUILD_DIR
+  .heroku/node/bin/npm run build
 else
   echo '=====> Stateless build, the JavaScript bundle will be generated on start-up'
   mkdir -p $BUILD_DIR/.profile.d
