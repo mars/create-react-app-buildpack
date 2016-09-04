@@ -88,6 +88,7 @@ if [ 'true' == "${REACT_APP_STATEFUL_BUILD-false}" ]; then
   .heroku/node/bin/npm run build
 else
   echo '=====> Stateless build, the JavaScript bundle will be generated on start-up'
-  mkdir -p $BUILD_DIR/.profile.d
-  cp $BP_DIR/.profile.d/create-react-app.sh $BUILD_DIR/.profile.d/
 fi
+
+mkdir -p $BUILD_DIR/.profile.d
+cp $BP_DIR/.profile.d/create-react-app.sh $BUILD_DIR/.profile.d/
