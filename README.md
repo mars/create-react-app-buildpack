@@ -116,12 +116,18 @@ Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-v
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-♻️ The app must be re-deployed for this change to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
+#### Add-on config vars
+
+To use the config vars directly from an add-on, create it with a custom `REACT_APP_` prefix.
+
+Example with the `fixie` add-on:
 
 ```bash
-git commit --allow-empty -m "Set REACT_APP_HELLO config var"
-git push heroku master
+heroku addons:create fixie --as REACT_APP_FIXIE
 ```
+
+See: [Creating an add-on](https://devcenter.heroku.com/articles/managing-add-ons#creating-an-add-on)
+
 
 Version compatibility
 ---------------------
@@ -147,10 +153,11 @@ This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpac
   * `node_modules` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
   * generates the [default `static.json`](#customization)
-  * performs the production build for create-react-app, `npm run build`
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
   * [Nginx](http://nginx.org/en/) web server
   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
+
+Whenever a [dyno](https://devcenter.heroku.com/articles/dynos) starts-up, [`npm run build` is executed](.profile.d/create-react-app.sh) to create the production bundle with the current [environment variables](#environment-variables).
 
 
 ### General-purpose SPA deployment

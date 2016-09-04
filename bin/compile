@@ -64,3 +64,7 @@ else
   echo "create-react-app `.buildpacks` not defined. Exiting."
   exit 1
 fi
+
+echo '=====> Enabling `npm run build` on start-up'
+mkdir -p $BUILD_DIR/.profile.d
+cp $BP_DIR/.profile.d/create-react-app.sh $BUILD_DIR/.profile.d/
