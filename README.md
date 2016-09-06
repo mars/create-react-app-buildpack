@@ -187,6 +187,7 @@ This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpac
   * complete Node.js enviroment to support the webpack build
   * `node_modules` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
+  * generates the default `mustache_templates.conf`
   * generates the [default `static.json`](#customization)
   * performs the production build for create-react-app, `npm run build`
 3. [`heroku/heroku-buildpack-mustache`](https://github.com/heroku/heroku-buildpack-mustache)
