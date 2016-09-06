@@ -123,6 +123,40 @@ git commit --allow-empty -m "Set REACT_APP_HELLO config var"
 git push heroku master
 ```
 
+#### Runtime configuration
+
+🚨 Experimental using [heroku-buildpack-mustache](https://github.com/heroku/heroku-buildpack-mustache).
+
+Create `mustache_templates.conf` with the following content:
+
+```
+build/index.html
+```
+
+Add script element to `index.html` to capture environment variable values:
+
+```html
+  <head>
+    <!-- Existing head elements come first -->
+    <script type="text/javascript">
+      react_app_env = {};
+      react_app_env.HELLO = '{{REACT_APP_HELLO}}';
+      react_app_env.GOODBYE = '{{REACT_APP_GOODBYE}}';
+    </script>
+  </head>
+```
+
+Then, use these globals within the React app.
+
+```javascript
+const hello = react_app_env.HELLO;
+```
+
+Globals are normally considered dirty, so you may build up a more acceptable pattern for using these values in an app, such as:
+
+* create a module to read the global values and make them available via `require`
+* create a [higher order component [HOC]](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that makes the values available via props
+
 Version compatibility
 ---------------------
 
