@@ -35,15 +35,6 @@ rm -rf $dir
 # * Install `npm build` tooling.
 export NPM_CONFIG_PRODUCTION=false
 
-# Ensure this config exists so the buildpack successfully detects
-MUSTACHE_TEMPLATES_CONF="$BUILD_DIR/mustache_templates.conf"
-if [ -f "$MUSTACHE_TEMPLATES_CONF" ]; then
-  echo 'Using existing `mustache_templates.conf`' | indent
-else
-  echo 'Writing `mustache_templates.conf` to support create-react-app' | indent
-  echo "build/index.html" > "$MUSTACHE_TEMPLATES_CONF"
-fi
-
 echo "=====> Downloading Buildpack: $url"
 
 if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then

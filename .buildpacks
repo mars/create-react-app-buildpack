@@ -1,4 +1,4 @@
 https://github.com/heroku/heroku-buildpack-nodejs.git
-https://github.com/mars/create-react-app-inner-buildpack.git
+https://github.com/mars/create-react-app-inner-buildpack.git#runtime-env-vars
 https://github.com/heroku/heroku-buildpack-mustache.git
 https://github.com/heroku/heroku-buildpack-static.git
