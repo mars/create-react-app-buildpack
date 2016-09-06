@@ -181,7 +181,7 @@ Usually, using master [as directed in the main instructions](#create-the-heroku-
 Architecture 🏙
 ------------
 
-This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
+This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
 
 1. [`heroku/nodejs` buildpack](https://github.com/heroku/heroku-buildpack-nodejs)
   * complete Node.js enviroment to support the webpack build
