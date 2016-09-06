@@ -139,6 +139,8 @@ For variables that may change between releases or environments:
   * URLs to APIs
   * secret tokens
 
+Any environment variable is accessible at runtime, not just `REACT_APP_*`.
+
 Add script element to `index.html` to capture environment variable values:
 
 ```html
