@@ -108,15 +108,23 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 
 ### Environment variables
 
-[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) and [`NODE_*`](https://github.com/facebookincubator/create-react-app/pull/476) environment variables are supported on Heroku during the compile phase, when `npm run build` is executed to generate the JavaScript bundle.
-
 Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-♻️ The app must be re-deployed for this change to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
+#### Compile-time configuration
+
+For variables that will not change between environments, such as:
+
+  * version number
+  * commit sha or number
+  * browser support flags
+
+[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) and [`NODE_*`](https://github.com/facebookincubator/create-react-app/pull/476) environment variables are supported on Heroku during the compile phase, when `npm run build` is executed to generate the JavaScript bundle.
+
+♻️ The app must be re-deployed for compiled changed to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
 
 ```bash
 git commit --allow-empty -m "Set REACT_APP_HELLO config var"
@@ -125,13 +133,11 @@ git push heroku master
 
 #### Runtime configuration
 
-🚨 Experimental using [heroku-buildpack-mustache](https://github.com/heroku/heroku-buildpack-mustache).
+For variables that may change between releases or environments:
 
-Create `mustache_templates.conf` with the following content:
-
-```
-build/index.html
-```
+  * Heroku add-on config vars
+  * URLs to APIs
+  * secret tokens
 
 Add script element to `index.html` to capture environment variable values:
 
@@ -141,7 +147,6 @@ Add script element to `index.html` to capture environment variable values:
     <script type="text/javascript">
       react_app_env = {};
       react_app_env.HELLO = '{{REACT_APP_HELLO}}';
-      react_app_env.GOODBYE = '{{REACT_APP_GOODBYE}}';
     </script>
   </head>
 ```
@@ -182,7 +187,9 @@ This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpac
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
   * generates the [default `static.json`](#customization)
   * performs the production build for create-react-app, `npm run build`
-3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
+3. [`heroku/heroku-buildpack-mustache`](https://github.com/heroku/heroku-buildpack-mustache)
+  * performs [runtime replacement of environment variables](#runtime-configuration)
+4. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
   * [Nginx](http://nginx.org/en/) web server
   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
 
