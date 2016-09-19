@@ -116,12 +116,30 @@ Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-v
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-♻️ The app must be re-deployed for this change to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
+#### Add-on config vars
+
+To use the config vars directly from an add-on, create it with a custom `REACT_APP_` prefix.
+
+Example with the `fixie` add-on:
 
 ```bash
-git commit --allow-empty -m "Set REACT_APP_HELLO config var"
-git push heroku master
+heroku addons:create fixie --as REACT_APP_FIXIE
 ```
+
+See: [Creating an add-on](https://devcenter.heroku.com/articles/managing-add-ons#creating-an-add-on)
+
+#### Stateless builds
+
+Environment variables may be different between various instances of an app, such as dev, staging, & production. This buildpack follows Heroku's stateless app architecture by bundling the JavaScript with these values everytime a dyno starts-up.
+
+If bundling the JavaScript takes longer than the [boot timeout limit](https://devcenter.heroku.com/articles/limits#boot-timeout) (currently 60-seconds), then the app will [fail to start-up](https://devcenter.heroku.com/articles/error-codes#h20-app-boot-timeout).
+
+Here are a few options to work around this limitation:
+
+  * limit use of environment vars to values that do not change between instances of the app
+  * `heroku config:set REACT_APP_STATEFUL_BUILD=true` will switch bundling the JavaScript to the build phase, where it has a time limit of 30-minutes, but updating environment variables will require redeployment, potentially breaking things like [Pipeline](https://devcenter.heroku.com/articles/pipelines) promotions
+  * contact Heroku support to have the boot timeout for the app lifted up to 120-seconds, but this will cause slower recovery from app crashes
+
 
 Version compatibility
 ---------------------
@@ -147,11 +165,12 @@ This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpac
   * `node_modules` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
   * generates the [default `static.json`](#customization)
-  * performs the production build for create-react-app, `npm run build`
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
   * [Nginx](http://nginx.org/en/) web server
   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
-
+4. This buildpack builds the JavaScript bundle in one of two ways:
+  1. when config var `REACT_APP_STATEFUL_BUILD` is set to `true`, then [`npm run build` is executed during compile](bin/compile) once for the deploy
+  2. otherwise, [`npm run build` is executed in the runtime](.profile.d/create-react-app.sh) each time a [dyno](https://devcenter.heroku.com/articles/dynos) starts-up
 
 ### General-purpose SPA deployment
 
