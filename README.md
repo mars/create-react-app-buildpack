@@ -108,20 +108,61 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 
 ### Environment variables
 
-[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) and [`NODE_*`](https://github.com/facebookincubator/create-react-app/pull/476) environment variables are supported on Heroku during the compile phase, when `npm run build` is executed to generate the JavaScript bundle.
-
 Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-♻️ The app must be re-deployed for this change to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
+#### Compile-time configuration
+
+For variables that will not change between environments, such as:
+
+  * version number
+  * commit sha or number
+  * browser support flags
+
+[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) and [`NODE_*`](https://github.com/facebookincubator/create-react-app/pull/476) environment variables are supported on Heroku during the compile phase, when `npm run build` is executed to generate the JavaScript bundle.
+
+♻️ The app must be re-deployed for compiled changed to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
 
 ```bash
 git commit --allow-empty -m "Set REACT_APP_HELLO config var"
 git push heroku master
 ```
+
+#### Runtime configuration
+
+For variables that may change between releases or environments:
+
+  * Heroku add-on config vars
+  * URLs to APIs
+  * secret tokens
+
+Any environment variable is accessible at runtime, not just `REACT_APP_*`.
+
+Add script element to `index.html` to capture environment variable values:
+
+```html
+  <head>
+    <!-- Existing head elements come first -->
+    <script type="text/javascript">
+      react_app_env = {};
+      react_app_env.HELLO = '{{REACT_APP_HELLO}}';
+    </script>
+  </head>
+```
+
+Then, use these globals within the React app.
+
+```javascript
+const hello = react_app_env.HELLO;
+```
+
+Globals are normally considered dirty, so you may build up a more acceptable pattern for using these values in an app, such as:
+
+* create a module to read the global values and make them available via `require`
+* create a [higher order component [HOC]](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that makes the values available via props
 
 Version compatibility
 ---------------------
@@ -140,15 +181,18 @@ Usually, using master [as directed in the main instructions](#create-the-heroku-
 Architecture 🏙
 ------------
 
-This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
+This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
 
 1. [`heroku/nodejs` buildpack](https://github.com/heroku/heroku-buildpack-nodejs)
   * complete Node.js enviroment to support the webpack build
   * `node_modules` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
+  * generates the default `mustache_templates.conf`
   * generates the [default `static.json`](#customization)
   * performs the production build for create-react-app, `npm run build`
-3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
+3. [`heroku/heroku-buildpack-mustache`](https://github.com/heroku/heroku-buildpack-mustache)
+  * performs [runtime replacement of environment variables](#runtime-configuration)
+4. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
   * [Nginx](http://nginx.org/en/) web server
   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
 
