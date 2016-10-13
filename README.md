@@ -108,6 +108,8 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 
 ### Environment variables
 
+[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) are supported with this buildpack.
+
 Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
 
 ```bash
@@ -121,8 +123,6 @@ For variables that will not change between environments, such as:
   * version number
   * commit sha or number
   * browser support flags
-
-[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) and [`NODE_*`](https://github.com/facebookincubator/create-react-app/pull/476) environment variables are supported on Heroku during the compile phase, when `npm run build` is executed to generate the JavaScript bundle.
 
 ♻️ The app must be re-deployed for compiled changed to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
 
@@ -139,9 +139,9 @@ For variables that may change between releases or environments:
   * URLs to APIs
   * secret tokens
 
-Any environment variable is accessible at runtime, not just `REACT_APP_*`.
+Runtime variables will be refreshed when setting new [config vars](https://devcenter.heroku.com/articles/config-vars), promoting through a [pipeline](https://devcenter.heroku.com/articles/pipelines), or [rolling back](https://devcenter.heroku.com/articles/releases#rollback) to a previous release.
 
-Install the runtime vars npm package, and then require/import it to use the vars anywhere in the app:
+Install the runtime vars npm package, and then require/import it to use the vars within components:
 
 ```bash
 npm install @mars/heroku-js-runtime-env --save
