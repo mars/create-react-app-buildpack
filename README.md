@@ -141,28 +141,26 @@ For variables that may change between releases or environments:
 
 Any environment variable is accessible at runtime, not just `REACT_APP_*`.
 
-Add script element to `index.html` to capture environment variable values:
+Install the runtime vars npm package, and then require/import it to use the vars anywhere in the app:
 
-```html
-  <head>
-    <!-- Existing head elements come first -->
-    <script type="text/javascript">
-      react_app_env = {};
-      react_app_env.HELLO = '{{REACT_APP_HELLO}}';
-    </script>
-  </head>
+```bash
+npm install @mars/heroku-js-runtime-env --save
 ```
-
-Then, use these globals within the React app.
 
 ```javascript
-const hello = react_app_env.HELLO;
+import React, { Component } from 'react';
+import runtimeEnv from '@mars/heroku-js-runtime-env';
+
+const env = runtimeEnv();
+
+class App extends Component {
+  render() {
+    return (
+      <code>Runtime env var example: { env.REACT_APP_HELLO }</code>
+    );
+  }
+}
 ```
-
-Globals are normally considered dirty, so you may build up a more acceptable pattern for using these values in an app, such as:
-
-* create a module to read the global values and make them available via `require`
-* create a [higher order component [HOC]](https://medium.com/@dan_abramov/mixins-are-dead-long-live-higher-order-components-94a0d2f9e750) that makes the values available via props
 
 Version compatibility
 ---------------------
