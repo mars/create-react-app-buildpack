@@ -185,12 +185,10 @@ This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildp
   * complete Node.js enviroment to support the webpack build
   * `node_modules` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
-  * generates the default `mustache_templates.conf`
+  * enables [runtime environment variables](#runtime-configuration)
   * generates the [default `static.json`](#customization)
   * performs the production build for create-react-app, `npm run build`
-3. [`heroku/heroku-buildpack-mustache`](https://github.com/heroku/heroku-buildpack-mustache)
-  * performs [runtime replacement of environment variables](#runtime-configuration)
-4. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
+3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
   * [Nginx](http://nginx.org/en/) web server
   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
 
