@@ -116,6 +116,8 @@ Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-v
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
+You may implement variables at [compile-time](#compile-time-configuration) or [runtime](#runtime-configuration).
+
 #### Compile-time configuration
 
 For variables that will not change between environments, such as:
@@ -124,7 +126,7 @@ For variables that will not change between environments, such as:
   * commit sha or number
   * browser support flags
 
-♻️ The app must be re-deployed for compiled changed to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
+♻️ The app must be re-deployed for compiled changed to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle. If this is not desired behavior, then use [runtime configuration](#runtime-configuration) instead.
 
 ```bash
 git commit --allow-empty -m "Set REACT_APP_HELLO config var"
@@ -139,7 +141,7 @@ For variables that may change between releases or environments:
   * URLs to APIs
   * secret tokens
 
-Runtime variables will be refreshed when setting new [config vars](https://devcenter.heroku.com/articles/config-vars), promoting through a [pipeline](https://devcenter.heroku.com/articles/pipelines), or [rolling back](https://devcenter.heroku.com/articles/releases#rollback) to a previous release.
+Runtime variables will be refreshed for every release, when setting new [config vars](https://devcenter.heroku.com/articles/config-vars), promoting through a [pipeline](https://devcenter.heroku.com/articles/pipelines), or [rolling back](https://devcenter.heroku.com/articles/releases#rollback) to a previous release.
 
 Install the runtime vars npm package, and then require/import it to use the vars within components:
 
@@ -151,16 +153,22 @@ npm install @mars/heroku-js-runtime-env --save
 import React, { Component } from 'react';
 import runtimeEnv from '@mars/heroku-js-runtime-env';
 
-const env = runtimeEnv();
-
 class App extends Component {
   render() {
+    const env = runtimeEnv();
+
     return (
       <code>Runtime env var example: { env.REACT_APP_HELLO }</code>
     );
   }
 }
 ```
+
+These runtime values will be serialized as JSON, so their values must be compatible with JSON:
+
+* Quote `"` will be auto-escaped
+* Backslash `\` is a control character, so the standard [JSON string rules](http://json.org) apply
+* All other UTF-8 characters may be used freely.
 
 Version compatibility
 ---------------------
