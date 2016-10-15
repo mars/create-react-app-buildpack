@@ -110,44 +110,56 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 
 [`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) are supported with this buildpack.
 
+#### Setting
+
 Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-You may implement variables at [compile-time](#compile-time-configuration) or [runtime](#runtime-configuration).
+#### Compile-time vs runtime
+
+Two versions of configuration variables are supported. Note that compile-time is the standard way javascript apps are configured. We've implemented runtime configuration to take advantage of [Heroku Flow](https://www.heroku.com/continuous-delivery).
+
+Requirement | [Compile-time](#compile-time-configuration) | [Runtime](#runtime-configuration)
+--- |:---:|:---: 
+never changes for the build | ✓ | 
+updates immediately when setting new [config vars](https://devcenter.heroku.com/articles/config-vars) |   | ✓
+different values for staging & production (in a [pipeline](https://devcenter.heroku.com/articles/pipelines)) |   | ✓
+
+Use-case | [Compile-time](#compile-time-configuration) | [Runtime](#runtime-configuration)
+--- |:---:|:---:
+build version number | ✓ | 
+browser support flags | ✓ | 
+external/API URL |   | ✓
+secret token |   | ✓
+Add-on config var |   | ✓
 
 #### Compile-time configuration
 
-For variables that will not change between environments, such as:
+For **internal values** that *will not change* between releases or environments.
 
-  * version number
-  * commit sha or number
-  * browser support flags
-
-♻️ The app must be re-deployed for compiled changed to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle. If this is not desired behavior, then use [runtime configuration](#runtime-configuration) instead.
+♻️ The app must be re-deployed for compiled changes to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
 
 ```bash
+heroku config:set REACT_APP_HELLO='I love sushi!'
+
 git commit --allow-empty -m "Set REACT_APP_HELLO config var"
 git push heroku master
 ```
 
 #### Runtime configuration
 
-For variables that may change between releases or environments:
+For **external values** that *may change* between releases or environments.
 
-  * Heroku add-on config vars
-  * URLs to APIs
-  * secret tokens
-
-Runtime variables will be refreshed for every release, when setting new [config vars](https://devcenter.heroku.com/articles/config-vars), promoting through a [pipeline](https://devcenter.heroku.com/articles/pipelines), or [rolling back](https://devcenter.heroku.com/articles/releases#rollback) to a previous release.
-
-Install the runtime vars npm package, and then require/import it to use the vars within components:
+Install the [runtime env npm package](https://www.npmjs.com/package/@mars/heroku-js-runtime-env):
 
 ```bash
 npm install @mars/heroku-js-runtime-env --save
 ```
+
+Then, require/import it to use the vars within components:
 
 ```javascript
 import React, { Component } from 'react';
@@ -155,8 +167,10 @@ import runtimeEnv from '@mars/heroku-js-runtime-env';
 
 class App extends Component {
   render() {
+    // Load the env object.
     const env = runtimeEnv();
 
+    // …then use values just like `process.env`
     return (
       <code>Runtime env var example: { env.REACT_APP_HELLO }</code>
     );
