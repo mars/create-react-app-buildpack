@@ -108,11 +108,11 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 
 ### Environment variables
 
-[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) are supported with this buildpack.
+[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) environment variable are supported with this buildpack.
 
-#### Setting
+🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
 
-Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
+Set [env vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
@@ -120,27 +120,22 @@ heroku config:set REACT_APP_HELLO='I love sushi!'
 
 #### Compile-time vs runtime
 
-Two versions of configuration variables are supported. Note that compile-time is the standard way javascript apps are configured. We've implemented runtime configuration to take advantage of [Heroku Flow](https://www.heroku.com/continuous-delivery).
+Two versions of variables are supported. In addition to compile-time variables applied during [build](https://github.com/facebookincubator/create-react-app#npm-run-build), this buildpack supports runtime configuration as well.
 
 Requirement | [Compile-time](#compile-time-configuration) | [Runtime](#runtime-configuration)
---- |:---:|:---: 
-never changes for the build | ✓ | 
+:--- |:---:|:---: 
+never changes for a build | ✓ |  
+support for [continuous delivery](https://www.heroku.com/continuous-delivery) |  | ✓
 updates immediately when setting new [config vars](https://devcenter.heroku.com/articles/config-vars) |   | ✓
 different values for staging & production (in a [pipeline](https://devcenter.heroku.com/articles/pipelines)) |   | ✓
-
-Use-case | [Compile-time](#compile-time-configuration) | [Runtime](#runtime-configuration)
---- |:---:|:---:
-build version number | ✓ | 
-browser support flags | ✓ | 
-external/API URL |   | ✓
-secret token |   | ✓
-Add-on config var |   | ✓
+ex: `REACT_APP_BUILD_VERSION` (static fact about the bundle) | ✓ | 
+ex: `REACT_APP_DEBUG_ASSERTIONS` ([prune code from bundle](https://webpack.github.io/docs/list-of-plugins.html#defineplugin)) | ✓ | 
+ex: `REACT_APP_API_URL` (transient, external reference) |   | ✓
+ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#add-on-config-vars)) |   | ✓
 
 #### Compile-time configuration
 
-For **internal values** that *will not change* between releases or environments.
-
-♻️ The app must be re-deployed for compiled changes to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
+♻️ The app must be re-deployed for compiled changes to take effect.
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
@@ -150,8 +145,6 @@ git push heroku master
 ```
 
 #### Runtime configuration
-
-For **external values** that *may change* between releases or environments.
 
 Install the [runtime env npm package](https://www.npmjs.com/package/@mars/heroku-js-runtime-env):
 
@@ -183,6 +176,26 @@ These runtime values will be serialized as JSON, so their values must be compati
 * Quote `"` will be auto-escaped
 * Backslash `\` is a control character, so the standard [JSON string rules](http://json.org) apply
 * All other UTF-8 characters may be used freely.
+
+#### Add-on config vars
+
+🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
+
+Use a custom [`.profile.d` script](https://devcenter.heroku.com/articles/buildpack-api#profile-d-scripts) to make variables visible to the React app by prefixing them with `REACT_APP_`.
+
+1. create `.profile.d/000-react-app-exports.sh`
+1. make it executable `chmod +x .profile.d/000-react-app-exports.sh`
+1. add an `export` line for each variable:
+
+  ```bash
+  export REACT_APP_ADDON_CONFIG=${ADDON_CONFIG:-}
+  ```
+
+For example, to use the API key for the [Filestack](https://elements.heroku.com/addons/filepicker) JS image uploader:
+
+```bash
+export REACT_APP_FILEPICKER_API_KEY=${FILEPICKER_API_KEY:-}
+```
 
 Version compatibility
 ---------------------
