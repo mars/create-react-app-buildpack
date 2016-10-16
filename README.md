@@ -175,12 +175,6 @@ class App extends Component {
 }
 ```
 
-👓 These runtime values will be serialized as JSON, so their values must be compatible with JSON:
-
-* quote `"` will be auto-escaped
-* backslash `\` is a control character, so the standard [JSON string rules](http://json.org) apply
-* all other UTF-8 characters may be used freely.
-
 #### Add-on config vars
 
 🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
