@@ -175,6 +175,8 @@ class App extends Component {
 }
 ```
 
+⚠️ *Avoid setting backslash escape sequences, such as `\n`, into Runtime config vars. Use literal UTF-8 values only; they will be automatically escaped.*
+
 #### Add-on config vars
 
 🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
