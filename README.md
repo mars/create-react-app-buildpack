@@ -118,7 +118,7 @@ Set [env vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-#### Compile-time vs runtime
+#### Compile-time vs Runtime
 
 Two versions of variables are supported. In addition to compile-time variables applied during [build](https://github.com/facebookincubator/create-react-app#npm-run-build), this buildpack supports runtime configuration as well.
 
@@ -171,11 +171,11 @@ class App extends Component {
 }
 ```
 
-These runtime values will be serialized as JSON, so their values must be compatible with JSON:
+👓 These runtime values will be serialized as JSON, so their values must be compatible with JSON:
 
-* Quote `"` will be auto-escaped
-* Backslash `\` is a control character, so the standard [JSON string rules](http://json.org) apply
-* All other UTF-8 characters may be used freely.
+* quote `"` will be auto-escaped
+* backslash `\` is a control character, so the standard [JSON string rules](http://json.org) apply
+* all other UTF-8 characters may be used freely.
 
 #### Add-on config vars
 
@@ -190,6 +190,7 @@ Use a custom [`.profile.d` script](https://devcenter.heroku.com/articles/buildpa
   ```bash
   export REACT_APP_ADDON_CONFIG=${ADDON_CONFIG:-}
   ```
+1. set-up & use [Runtime configuration](#runtime-configuration) to access the variables
 
 For example, to use the API key for the [Filestack](https://elements.heroku.com/addons/filepicker) JS image uploader:
 
