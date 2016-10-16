@@ -118,6 +118,8 @@ Set [env vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
+For local development, use [dotenv](https://www.npmjs.com/package/dotenv) to load variables from a `.env` file. *Requires at least create-react-app 0.7.*
+
 #### Compile-time vs Runtime
 
 Two versions of variables are supported. In addition to compile-time variables applied during [build](https://github.com/facebookincubator/create-react-app#npm-run-build), this buildpack supports runtime configuration as well.
@@ -145,6 +147,8 @@ git push heroku master
 ```
 
 #### Runtime configuration
+
+*Requires at least create-react-app 0.7.*
 
 Install the [runtime env npm package](https://www.npmjs.com/package/@mars/heroku-js-runtime-env):
 
