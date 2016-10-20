@@ -55,10 +55,10 @@ At this point, this new repo is local, only on your computer. Eventually, you ma
 ### Create the Heroku app
 
 ```bash
-heroku create my-app-name --buildpack https://github.com/mars/create-react-app-buildpack.git
+heroku create $my-app-name --buildpack https://github.com/mars/create-react-app-buildpack.git
 ```
 
-✏️ *Replace `my-app-name` with a name for your unique app.*
+✏️ *Replace `$my-app-name` with a name for your unique app.*
 
 This command:
 
@@ -170,7 +170,7 @@ Version compatibility
 
 This buildpack will never intentionally cause previously deployed apps to become undeployable. Usually, using master [as directed in the main instructions](#create-the-heroku-app) will automatically deploy an app with the most recent version of this buildpack.
 
-[Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock your deployment to a specific version, if that kind of stability pleases you:
+[Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock an app to a specific version, if that kind of stability pleases you:
 
 ```bash
 heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v1.2.1
