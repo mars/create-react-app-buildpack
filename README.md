@@ -1,9 +1,27 @@
 Heroku Buildpack for create-react-app
 =====================================
 
-Deploy React.js web apps generated with [create-react-app](https://github.com/facebookincubator/create-react-app).
+Deploy React.js web apps generated with [create-react-app](https://github.com/facebookincubator/create-react-app). Automates deployment with the built-in bundler and serves it up via [Nginx](http://nginx.org/en/). See the [introductory blog post](https://blog.heroku.com/deploying-react-with-zero-configuration) and entry in [Heroku elements](https://elements.heroku.com/buildpacks/mars/create-react-app-buildpack).
 
-> Automates deployment with the built-in tooling and serves it up via [Nginx](http://nginx.org/en/).
+Table of contents
+-----------------
+
+* ⚠️ [Requirements](#requires)
+* 🚀 [Usage](#usage)
+  1. [Generate a React app](#generate-a-react-app)
+  1. [Make it a git repo](#make-it-a-git-repo)
+  1. [Create the Heroku app](#create-the-heroku-app)
+  1. [Commit & deploy ♻️](#commit--deploy-️)
+  1. [Continue Development](#continue-development)
+* 👓 [Customization](#customization)
+  * [Web server](#web-server)
+    * [Routing clean URLs](#routing-clean-urls)
+    * [HTTPS-only](#https-only)
+  * [Environment variables](#environment-variables)
+* 📍 [Version compatibility](#version-compatibility)
+* 🏙 [Architecture](#architecture-)
+
+-----
 
 Requires
 --------
@@ -106,6 +124,30 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 }
 ```
 
+#### HTTPS-only
+
+Enforce secure connections by automatically redirecting insecure requests to `https://`:
+
+```json
+{
+  "https_only": true
+}
+```
+
+Prevent downgrade attacks by adding an HSTS header, [HTTP strict transport security](https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security):
+
+```json
+{
+  "headers": {
+    "/**": {
+      "Strict-Transport-Security": "max-age=7776000"
+    }
+  }
+}
+```
+
+* `max-age` is the number of seconds to enforce HTTPS since the last connection; the example is 90-days
+
 ### Environment variables
 
 [`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) and [`NODE_*`](https://github.com/facebookincubator/create-react-app/pull/476) environment variables are supported on Heroku during the compile phase, when `npm run build` is executed to generate the JavaScript bundle.
@@ -126,15 +168,17 @@ git push heroku master
 Version compatibility
 ---------------------
 
-We'll keep branches to maintain compatibility as `create-react-app` evolves. These will only be useful for projects that have been ejected and therefore stagnate with the tooling of a specific version.
+This buildpack will never intentionally cause previously deployed apps to become undeployable. Usually, using master [as directed in the main instructions](#create-the-heroku-app) will automatically deploy an app with the most recent version of this buildpack.
 
-Currently, using branch `cra-0.2.x` will ensure that your deployment continues to work with 0.2.x versions of `create-react-app`.
+[Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock your deployment to a specific version, if that kind of stability pleases you:
 
 ```bash
-heroku create -b https://github.com/mars/create-react-app-buildpack.git#cra-0.2.x
+heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v1.2.1
 ```
 
-Usually, using master [as directed in the main instructions](#create-the-heroku-app) will be appropriate to automatically keep up with the newest `create-react-app`.
+✏️ *Replace `v1.2.1` with the desired [release tag](https://github.com/mars/create-react-app-buildpack/releases).*
+
+♻️ Then, commit & deploy to rebuild on the new buildpack version.
 
 
 Architecture 🏙
