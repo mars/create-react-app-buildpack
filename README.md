@@ -126,7 +126,7 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 
 #### HTTPS-only
 
-Enforce secure connections by automatically redirecting insecure requests to `https://`:
+Enforce secure connections by automatically redirecting insecure requests to **https://**, in `static.json`:
 
 ```json
 {
@@ -134,7 +134,7 @@ Enforce secure connections by automatically redirecting insecure requests to `ht
 }
 ```
 
-Prevent downgrade attacks by adding an HSTS header, [HTTP strict transport security](https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security):
+Prevent downgrade attacks with [HTTP strict transport security](https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security). Add HSTS `"headers"` to `static.json`:
 
 ```json
 {
