@@ -62,14 +62,6 @@ capture()
 
   #$@ >${STD_OUT} 2>${STD_ERR}
   STD_OUT_FIFO="${SHUNIT_TMPDIR:-/tmp}/out.$$" STD_IN_FIFO="${SHUNIT_TMPDIR:-/tmp}/err.$$"
-  
-  if [ -f ${STD_OUT_FIFO} ]; then
-    rm ${STD_OUT_FIFO}
-  fi
-
-  if [ -f ${STD_ERR_FIFO} ]; then
-    rm ${STD_ERR_FIFO}
-  fi
 
   mkfifo "$STD_OUT_FIFO" "$STD_IN_FIFO"
   trap 'rm "$STD_OUT_FIFO" "$STD_IN_FIFO"' EXIT
@@ -89,6 +81,14 @@ resetCapture()
 
   if [ -f ${STD_ERR} ]; then
     rm ${STD_ERR}
+  fi
+  
+  if [ ${STD_OUT_FIFO} ] && [ -e ${STD_OUT_FIFO} ]; then
+    rm ${STD_OUT_FIFO}
+  fi
+
+  if [ ${STD_ERR_FIFO} ] && [ -e ${STD_ERR_FIFO} ]; then
+    rm ${STD_ERR_FIFO}
   fi
 
   unset LAST_COMMAND
