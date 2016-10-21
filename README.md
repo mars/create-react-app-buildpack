@@ -165,9 +165,9 @@ git push heroku master
 Version compatibility
 ---------------------
 
-This buildpack will never intentionally cause previously deployed apps to become undeployable. Usually, using master [as directed in the main instructions](#create-the-heroku-app) will automatically deploy an app with the most recent version of this buildpack.
+This buildpack will never intentionally cause previously deployed apps to become undeployable. Using master [as directed in the main instructions](#create-the-heroku-app) will always deploy an app with the most recent version of this buildpack.
 
-[Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock an app to a specific version, if that kind of stability pleases you:
+[Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock an app to a specific version, if that kind of determinism pleases you:
 
 ```bash
 heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v1.2.1
