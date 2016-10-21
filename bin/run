@@ -1,0 +1,138 @@
+#!/usr/bin/env bash
+
+export BUILDPACK_TEST_RUNNER_HOME=$(cd $(dirname $0); cd ..; pwd)
+
+max() {
+  if [ $1 -gt $2 ]; then
+    echo $1
+  else
+    echo $2
+  fi
+}
+
+indent() {
+  while read line; do
+    echo "  ${line}"
+  done
+}
+
+add_magic_curl_to_path() {
+  export PATH=${BUILDPACK_TEST_RUNNER_HOME}/lib/magic_curl/bin:${PATH}
+}
+
+if [ 0 -eq $# ]; then
+  cat <<EOF
+Buildpack Test Runner
+
+Usage: run [-c] [-s single_suite_test.sh] buildpack_1 [buildpack_2 [...]]
+
+         -c   enable cUrl caching
+         -C   enable cUrl caching, but clear the existing cache first
+         -s   specify a single test suite to run in each buildpack's test directory
+buildpack_n   local directory or a remote Git repository ending in .git for buildpack
+EOF
+  exit 1
+fi
+
+if [ "${1}" = "-c" ]; then
+  shift
+  add_magic_curl_to_path
+fi
+
+if [ "${1}" = "-C" ]; then
+  shift
+  add_magic_curl_to_path
+  cache-clear
+fi
+
+if [ "${1}" = "-s" ]; then
+  shift
+
+  singleTest=${1}
+  shift
+
+  if [ -z "${singleTest}" ] || [ -d "${singleTest}" ]; then
+    echo "Invalid single test argument" 2>/dev/null
+    exit 1
+  fi
+fi
+
+all_start_time="$(date +%s)"
+exit_code=0
+for bp in ${@}; do
+  bp_start_time="$(date +%s)"
+  echo -e "\nBUILDPACK: ${bp}"
+
+  echo "${bp}" | grep -q -e ".*\.git$"
+  if [ 0 -eq $? ]; then
+    tmp_repo="$(mktemp -d /tmp/heroku_buildpack_testrunner_tmp_repo.XXXX)"
+    git clone ${bp} ${tmp_repo}
+    bp=${tmp_repo}
+  fi
+
+  if [ ! -d ${bp} ]; then
+    echo "ERROR: '${bp}' is not a directory" >&2
+    exit_code=$(max ${exit_code} 1)
+    continue
+  fi
+
+  if [ -z "$(ls ${bp}/test/*_test.sh 2>/dev/null)" ]; then
+    echo "ERROR: Buildpack '${bp}' does not contain valid tests. Must contain a 'test' directory and with files matching '*_test.sh'" >&2
+    exit_code=$(max ${exit_code} 1)
+    continue
+  fi
+
+  # copy the buildpack into a temp dir to avoid clobbering the original if its self distructive
+  # hard code string 'bp' to avoid weirdness with self refernces and hidden files
+  bp_mirror="$(mktemp -d /tmp/bp_mirror.XXXX)"
+  cp -r ${bp} ${bp_mirror}/bp
+  export BUILDPACK_HOME=${bp_mirror}/bp
+
+  # create a virtual working directory from which to run the tests to avoid happenstance local references
+  real_working_dir=$PWD
+  virtual_working_dir="$(mktemp -d /tmp/virtual_working_dir.XXXX)"
+  cd ${virtual_working_dir}
+
+  for f in ${BUILDPACK_HOME}/test/*_test.sh; do
+    if [ -n "${singleTest}" ] && [ ${BUILDPACK_HOME}/test/${singleTest} != ${f} ]; then
+      continue
+    fi
+
+    suite_start_time="$(date +%s)"
+
+    echo "  TEST SUITE: $(basename ${f})"
+    ${SHUNIT_HOME?"'SHUNIT_HOME' environment variable must be set"}/src/shunit2 ${f} | indent
+    exit_code=$(max ${exit_code} ${PIPESTATUS[0]})
+
+    suite_end_time="$(date +%s)"
+    suite_elapsed_time="$(expr ${suite_end_time} - ${suite_start_time})"
+    echo -e "  ${suite_elapsed_time} SECONDS\n"
+  done
+  bp_end_time="$(date +%s)"
+  bp_elapsed_time="$(expr ${bp_end_time} - ${bp_start_time})"
+  echo "${bp_elapsed_time} SECONDS"
+
+  rm -rf ${bp_mirror}
+
+  cd $real_working_dir
+  rm -rf ${virtual_working_dir}
+
+  if [ -d ${tmp_repo} ]; then
+    rm -rf ${tmp_repo}
+  fi
+done
+
+echo -e "\n------"
+if [ ${exit_code} -eq 0 ]; then
+  echo "ALL OK"
+else
+  echo "FAILURES (see individual results for details)"
+fi
+
+all_end_time="$(date +%s)"
+all_elapsed_time="$(expr ${all_end_time} - ${all_start_time})"
+echo "${all_elapsed_time} SECONDS"
+
+
+exit ${exit_code}
+
