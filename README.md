@@ -17,6 +17,7 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
   * [Environment variables](#environment-variables)
 * 📍 [Version compatibility](#version-compatibility)
 * 🏙 [Architecture](#architecture-)
+* 🔩 [Development](#development)
 
 -----
 
@@ -202,3 +203,9 @@ This buildpack can deploy any SPA [single-page app] as long as it meets the foll
 
 * `npm run build` performs the transpile/bundling
 * the file `build/index.html` or [the root specified in `static.json`](#customization) exists at runtime.
+
+
+Development
+-----------
+
+Create & run tests using the [Buildpack Testrunner](https://github.com/heroku/heroku-buildpack-testrunner).
