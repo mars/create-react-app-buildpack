@@ -60,22 +60,22 @@ capture()
   
   LAST_COMMAND="$@"
 
-  $@ >${STD_OUT} 2>${STD_ERR}
-  # STD_OUT_FIFO="${SHUNIT_TMPDIR:-/tmp}/out.$$" STD_IN_FIFO="${SHUNIT_TMPDIR:-/tmp}/err.$$"
+  #$@ >${STD_OUT} 2>${STD_ERR}
+  STD_OUT_FIFO="${SHUNIT_TMPDIR:-/tmp}/out.$$" STD_IN_FIFO="${SHUNIT_TMPDIR:-/tmp}/err.$$"
   
-  # if [ -f ${STD_OUT_FIFO} ]; then
-  #   rm ${STD_OUT_FIFO}
-  # fi
+  if [ -f ${STD_OUT_FIFO} ]; then
+    rm ${STD_OUT_FIFO}
+  fi
 
-  # if [ -f ${STD_ERR_FIFO} ]; then
-  #   rm ${STD_ERR_FIFO}
-  # fi
+  if [ -f ${STD_ERR_FIFO} ]; then
+    rm ${STD_ERR_FIFO}
+  fi
 
-  # mkfifo "$STD_OUT_FIFO" "$STD_IN_FIFO"
-  # trap 'rm "$STD_OUT_FIFO" "$STD_IN_FIFO"' EXIT
-  # tee "$STD_OUT" < "$STD_OUT_FIFO" &
-  # tee "$STD_ERR" < "$STD_IN_FIFO" >&2 &
-  # $@ >"$STD_OUT_FIFO" 2>"$STD_IN_FIFO"
+  mkfifo "$STD_OUT_FIFO" "$STD_IN_FIFO"
+  trap 'rm "$STD_OUT_FIFO" "$STD_IN_FIFO"' EXIT
+  tee "$STD_OUT" < "$STD_OUT_FIFO" &
+  tee "$STD_ERR" < "$STD_IN_FIFO" >&2 &
+  $@ >"$STD_OUT_FIFO" 2>"$STD_IN_FIFO"
 
   RETURN=$?
   rtrn=${RETURN} # deprecated
