@@ -1,0 +1,16 @@
+language: bash
+
+branches:
+  only:
+    - master
+
+before_install:
+  - curl --silent https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/shunit2/shunit2-2.1.6.tgz | tar xz -C /tmp/
+
+install: true
+
+script: bin/run -c .
+
+env:
+  global:
+    - SHUNIT_HOME="/tmp/shunit2-2.1.6"

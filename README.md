@@ -208,4 +208,6 @@ This buildpack can deploy any SPA [single-page app] as long as it meets the foll
 Development
 -----------
 
+[![Build Status](https://travis-ci.org/mars/create-react-app-buildpack.svg?branch=master)](https://travis-ci.org/mars/create-react-app-buildpack)
+
 Create & run tests using the [Buildpack Testrunner](https://github.com/heroku/heroku-buildpack-testrunner).

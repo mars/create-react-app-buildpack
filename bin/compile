@@ -25,42 +25,60 @@ BP_DIR=`cd $(dirname $0); cd ..; pwd`
 
 # Use architecture of multi-buildpack to compose behavior.
 # https://github.com/heroku/heroku-buildpack-multi
-cp $BP_DIR/.buildpacks $BUILD_DIR/.buildpacks
-url=https://github.com/heroku/heroku-buildpack-multi.git
-branch=""
-dir=$(mktemp -t buildpackXXXXX)
-rm -rf $dir
+for BUILDPACK in $(cat $BP_DIR/.buildpacks); do
+  dir=$(mktemp -t buildpackXXXXX)
+  rm -rf $dir
 
-# Set env vars for the inner buildpacks in `.buildpacks`
-# * Install `npm build` tooling.
-export NPM_CONFIG_PRODUCTION=false
+  url=${BUILDPACK%#*}
+  branch=${BUILDPACK#*#}
 
-echo "=====> Downloading Buildpack: $url"
-
-if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then
-  mkdir -p "$dir"
-  curl -s "$url" | tar xvz -C "$dir" >/dev/null 2>&1
-else
-  git clone $url $dir >/dev/null 2>&1
-fi
-cd $dir
-
-if [ "$branch" != "" ]; then
-  git checkout $branch >/dev/null 2>&1
-fi
-
-chmod -f +x $dir/bin/{detect,compile,release}
-
-framework=$($dir/bin/detect $1)
-
-if [ $? == 0 ]; then
-  echo "=====> Detected Framework: $framework"
-  $dir/bin/compile $BUILD_DIR $CACHE_DIR $ENV_DIR
-
-  if [ $? != 0 ]; then
-    exit 1
+  if [ "$branch" == "$url" ]; then
+    branch=""
   fi
-else
-  echo "create-react-app `.buildpacks` not defined. Exiting."
-  exit 1
+
+  if [ "$url" != "" ]; then
+    echo "=====> Downloading Buildpack: $url"
+
+    if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then
+      mkdir -p "$dir"
+      curl -s "$url" | tar xvz -C "$dir" >/dev/null 2>&1
+    else
+      git clone $url $dir >/dev/null 2>&1
+    fi
+    cd $dir
+
+    if [ "$branch" != "" ]; then
+      git checkout $branch >/dev/null 2>&1
+    fi
+
+    # we'll get errors later if these are needed and don't exist
+    chmod -f +x $dir/bin/{detect,compile,release} || true
+
+    framework=$($dir/bin/detect $1)
+
+    if [ $? == 0 ]; then
+      echo "=====> Detected Framework: $framework"
+      $dir/bin/compile $1 $2 $3
+
+      if [ $? != 0 ]; then
+        exit 1
+      fi
+
+      # check if the buildpack left behind an environment for subsequent ones
+      if [ -e $dir/export ]; then
+        source $dir/export
+      fi
+
+      if [ -x $dir/bin/release ]; then
+        $dir/bin/release $1 > $1/last_pack_release.out
+      fi
+    else
+      echo "Couldn't detect any framework for this buildpack. Exiting."
+      exit 1
+    fi
+  fi
+done
+
+if [ -e $1/last_pack_release.out ]; then
+  echo "Using release configuration from last framework ($framework)."
 fi

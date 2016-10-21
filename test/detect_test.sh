@@ -2,11 +2,11 @@
 
 test_fails_without_package_json() {
   detect
-  assertCapturedError 1 'no'
+  assertNoAppDetected
 }
 
 test_matches_package_json() {
   touch $BUILD_DIR/package.json
   detect
-  assertCapturedSuccess
+  assertAppDetected create-react-app
 }

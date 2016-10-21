@@ -2,7 +2,7 @@
 # bin/detect <build-dir>
 
 if [ -f $1/package.json ]; then
-  echo "React.js (create-react-app) multi" && exit 0
+  echo "create-react-app" && exit 0
 else
   echo "no" && exit 1
 fi
