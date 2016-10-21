@@ -3,9 +3,6 @@ Heroku Buildpack for create-react-app
 
 Deploy React.js web apps generated with [create-react-app](https://github.com/facebookincubator/create-react-app). Automates deployment with the built-in bundler and serves it up via [Nginx](http://nginx.org/en/). See the [introductory blog post](https://blog.heroku.com/deploying-react-with-zero-configuration) and entry in [Heroku elements](https://elements.heroku.com/buildpacks/mars/create-react-app-buildpack).
 
-Table of contents
------------------
-
 * ⚠️ [Requirements](#requires)
 * 🚀 [Usage](#usage)
   1. [Generate a React app](#generate-a-react-app)
