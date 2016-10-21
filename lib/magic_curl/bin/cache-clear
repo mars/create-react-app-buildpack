@@ -1,0 +1,4 @@
+#!/bin/sh
+
+cache_dir=$(sed '/^\#/d' $(dirname ${0})/../conf/cache.conf | grep 'cache_dir'  | tail -n 1 | cut -d "=" -f2-)
+rm -r ${cache_dir}/*

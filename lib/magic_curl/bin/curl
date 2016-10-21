@@ -1,0 +1,55 @@
+#!/bin/sh
+
+#cache_dir=$(cat $(dirname ${0})/../conf/cache.conf | sed -r "s/cache_dir=(.*)$/\1/")
+cache_dir=$(sed '/^\#/d' $(dirname ${0})/../conf/cache.conf | grep 'cache_dir'  | tail -n 1 | cut -d "=" -f2-)
+
+# find the real curl cmd
+for c in $(which -a curl); do
+  if [ ${c} != ${0} ]; then
+    real_curl=${c}
+    break
+  fi
+done
+
+# find the URL argument and set path vars
+for arg; do
+  # don't cache head requests
+  if [ "$arg" = "-I" ] || [ "$arg" = "--head" ]; then
+    break
+  fi
+
+  echo "${arg}" | grep -q -E "^https?://"
+  if [ 0 -eq $? ]; then
+    rel_path=$(echo ${arg} | sed "s/^.*:\/\/\(.*\)/\1/")
+    local_path="${cache_dir}/${rel_path}"
+    local_path_no_cache="${cache_dir}/NO_CACHE/${rel_path}"
+    break
+  fi
+done
+
+# if the rel_path could not be found, just run curl directly
+# this should only happen when someone doesn't supply a URL we can handle or no URL at all
+if [ -z ${rel_path} ]; then
+  exec ${real_curl} $@
+fi
+
+# Write to the cache using the real curl cmd with the supplied arguments
+if [ ! -f ${local_path} ]; then
+  mkdir -p $(dirname ${local_path})
+  load_cache_args=$(echo "$@" | sed "s/[ ][ ]*-o[ ][ ]*[^ ][^ ]*//g" | sed "s/[ ][ ]*--output[ ][ ]*[^ ][^ ]*//g" | sed "s/-O//g" | sed "s/--remote-name//g")
+  ${real_curl} ${load_cache_args} > ${local_path}
+  if [ $? != 0 ]; then
+    rm ${local_path}
+    mkdir -p $(dirname ${local_path_no_cache})
+    touch ${local_path_no_cache}
+  fi
+fi
+
+# if not cachable, run curl directly
+if [ -f ${local_path_no_cache} ]; then
+  exec ${real_curl} $@
+fi
+
+# Use the real curl cmd to read from the local cache
+user_params=$(echo "$@" | sed "s/[ ]*[a-z]*:\/\/[^ ][^ ]*//")
+exec ${real_curl} --silent ${user_params} file://${local_path}
