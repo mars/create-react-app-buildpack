@@ -210,4 +210,7 @@ Development
 
 [![Build Status](https://travis-ci.org/mars/create-react-app-buildpack.svg?branch=master)](https://travis-ci.org/mars/create-react-app-buildpack)
 
-Create & run tests using the [Buildpack Testrunner](https://github.com/heroku/heroku-buildpack-testrunner).
+Create & run tests using the [Buildpack Testrunner](https://github.com/heroku/heroku-buildpack-testrunner). See the local setup guide.
+
+Open issues with ideas about feature direction.
+
