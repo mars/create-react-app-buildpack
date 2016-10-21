@@ -35,7 +35,9 @@ setUp()
 {
   beforeSetUp
   OUTPUT_DIR="$(mktemp -d ${SHUNIT_TMPDIR}/output.XXXX)"
+  STD_OUT_FIFO="${SHUNIT_TMPDIR:-/tmp}/out.$$"
   STD_OUT="${OUTPUT_DIR}/stdout"
+  STD_ERR_FIFO="${SHUNIT_TMPDIR:-/tmp}/err.$$"
   STD_ERR="${OUTPUT_DIR}/stderr"
   BUILD_DIR="${OUTPUT_DIR}/build"
   CACHE_DIR="${OUTPUT_DIR}/cache"
@@ -61,13 +63,11 @@ capture()
   LAST_COMMAND="$@"
 
   #$@ >${STD_OUT} 2>${STD_ERR}
-  STD_OUT_FIFO="${SHUNIT_TMPDIR:-/tmp}/out.$$" STD_IN_FIFO="${SHUNIT_TMPDIR:-/tmp}/err.$$"
-
-  mkfifo "$STD_OUT_FIFO" "$STD_IN_FIFO"
-  trap 'rm "$STD_OUT_FIFO" "$STD_IN_FIFO"' EXIT
+  mkfifo "$STD_OUT_FIFO" "$STD_ERR_FIFO"
+  trap 'rm "$STD_OUT_FIFO" "$STD_ERR_FIFO"' EXIT
   tee "$STD_OUT" < "$STD_OUT_FIFO" &
-  tee "$STD_ERR" < "$STD_IN_FIFO" >&2 &
-  $@ >"$STD_OUT_FIFO" 2>"$STD_IN_FIFO"
+  tee "$STD_ERR" < "$STD_ERR_FIFO" >&2 &
+  $@ >"$STD_OUT_FIFO" 2>"$STD_ERR_FIFO"
 
   RETURN=$?
   rtrn=${RETURN} # deprecated
