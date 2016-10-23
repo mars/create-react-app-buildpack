@@ -15,6 +15,12 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
     * [Routing clean URLs](#routing-clean-urls)
     * [HTTPS-only](#https-only)
   * [Environment variables](#environment-variables)
+    * [Set vars on Heroku](#set-vars-on-heroku)
+    * [Set vars for local dev](#set-vars-for-local-dev)
+    * [Compile-time vs Runtime](#compile-time-vs-runtime)
+      * [Compile-time config](#compile-time-configuration)
+      * [Runtime config](#runtime-configuration)
+    * [using an Add-on's config](#add-on-config-vars)
 * 📍 [Version compatibility](#version-compatibility)
 * 🏙 [Architecture](#architecture-)
 
@@ -147,21 +153,30 @@ Prevent downgrade attacks with [HTTP strict transport security](https://develope
 
 ### Environment variables
 
-[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) environment variable are supported with this buildpack.
+[`REACT_APP_*` environment variables](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) are supported with this buildpack.
 
 🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
 
-Set [env vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
+##### [Set vars on Heroku](https://devcenter.heroku.com/articles/config-vars)
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-For local development, use [dotenv](https://www.npmjs.com/package/dotenv) to load variables from a `.env` file. *Requires at least create-react-app 0.7.*
+##### Set vars for local dev
+
+*Requires at least create-react-app 0.7. Earlier versions only support Compile-time.*
+
+Create a `.env` file that sets a variable per line:
+
+```bash
+REACT_APP_API_URL=http://api.example.com
+REACT_APP_CLIENT_ID=XyzxYzxyZ
+```
 
 #### Compile-time vs Runtime
 
-Two versions of variables are supported. In addition to compile-time variables applied during [build](https://github.com/facebookincubator/create-react-app#npm-run-build), this buildpack supports runtime configuration as well.
+Two versions of variables are supported. In addition to compile-time variables applied during [build](https://github.com/facebookincubator/create-react-app#npm-run-build) the app supports variables set at runtime, applied as each web dyno starts-up.
 
 Requirement | [Compile-time](#compile-time-configuration) | [Runtime](#runtime-configuration)
 :--- |:---:|:---: 
