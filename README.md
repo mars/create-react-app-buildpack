@@ -147,19 +147,94 @@ Prevent downgrade attacks with [HTTP strict transport security](https://develope
 
 ### Environment variables
 
-[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) and [`NODE_*`](https://github.com/facebookincubator/create-react-app/pull/476) environment variables are supported on Heroku during the compile phase, when `npm run build` is executed to generate the JavaScript bundle.
+[`REACT_APP_*`](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) environment variable are supported with this buildpack.
 
-Set [config vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
+🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
+
+Set [env vars on a Heroku app](https://devcenter.heroku.com/articles/config-vars) like this:
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-♻️ The app must be re-deployed for this change to take effect, because the automatic restart after a config var change does not rebuild the JavaScript bundle.
+For local development, use [dotenv](https://www.npmjs.com/package/dotenv) to load variables from a `.env` file. *Requires at least create-react-app 0.7.*
+
+#### Compile-time vs Runtime
+
+Two versions of variables are supported. In addition to compile-time variables applied during [build](https://github.com/facebookincubator/create-react-app#npm-run-build), this buildpack supports runtime configuration as well.
+
+Requirement | [Compile-time](#compile-time-configuration) | [Runtime](#runtime-configuration)
+:--- |:---:|:---: 
+never changes for a build | ✓ |  
+support for [continuous delivery](https://www.heroku.com/continuous-delivery) |  | ✓
+updates immediately when setting new [config vars](https://devcenter.heroku.com/articles/config-vars) |   | ✓
+different values for staging & production (in a [pipeline](https://devcenter.heroku.com/articles/pipelines)) |   | ✓
+ex: `REACT_APP_BUILD_VERSION` (static fact about the bundle) | ✓ | 
+ex: `REACT_APP_DEBUG_ASSERTIONS` ([prune code from bundle](https://webpack.github.io/docs/list-of-plugins.html#defineplugin)) | ✓ | 
+ex: `REACT_APP_API_URL` (transient, external reference) |   | ✓
+ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#add-on-config-vars)) |   | ✓
+
+#### Compile-time configuration
+
+♻️ The app must be re-deployed for compiled changes to take effect.
 
 ```bash
+heroku config:set REACT_APP_HELLO='I love sushi!'
+
 git commit --allow-empty -m "Set REACT_APP_HELLO config var"
 git push heroku master
+```
+
+#### Runtime configuration
+
+*Requires at least create-react-app 0.7.*
+
+Install the [runtime env npm package](https://www.npmjs.com/package/@mars/heroku-js-runtime-env):
+
+```bash
+npm install @mars/heroku-js-runtime-env --save
+```
+
+Then, require/import it to use the vars within components:
+
+```javascript
+import React, { Component } from 'react';
+import runtimeEnv from '@mars/heroku-js-runtime-env';
+
+class App extends Component {
+  render() {
+    // Load the env object.
+    const env = runtimeEnv();
+
+    // …then use values just like `process.env`
+    return (
+      <code>Runtime env var example: { env.REACT_APP_HELLO }</code>
+    );
+  }
+}
+```
+
+⚠️ *Avoid setting backslash escape sequences, such as `\n`, into Runtime config vars. Use literal UTF-8 values only; they will be automatically escaped.*
+
+#### Add-on config vars
+
+🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
+
+Use a custom [`.profile.d` script](https://devcenter.heroku.com/articles/buildpack-api#profile-d-scripts) to make variables visible to the React app by prefixing them with `REACT_APP_`.
+
+1. create `.profile.d/000-react-app-exports.sh`
+1. make it executable `chmod +x .profile.d/000-react-app-exports.sh`
+1. add an `export` line for each variable:
+
+  ```bash
+  export REACT_APP_ADDON_CONFIG=${ADDON_CONFIG:-}
+  ```
+1. set-up & use [Runtime configuration](#runtime-configuration) to access the variables
+
+For example, to use the API key for the [Filestack](https://elements.heroku.com/addons/filepicker) JS image uploader:
+
+```bash
+export REACT_APP_FILEPICKER_API_KEY=${FILEPICKER_API_KEY:-}
 ```
 
 Version compatibility
@@ -181,12 +256,13 @@ heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v1.
 Architecture 🏙
 ------------
 
-This buildpack composes three buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
+This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
 
 1. [`heroku/nodejs` buildpack](https://github.com/heroku/heroku-buildpack-nodejs)
   * complete Node.js enviroment to support the webpack build
   * `node_modules` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
+  * enables [runtime environment variables](#runtime-configuration)
   * generates the [default `static.json`](#customization)
   * performs the production build for create-react-app, `npm run build`
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
