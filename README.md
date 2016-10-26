@@ -111,7 +111,7 @@ The default `static.json`, if it does not exist in the repo, is:
 { "root": "build/" }
 ```
 
-#### Routing clean URLs
+### Routing clean URLs
 
 By default, [React Router](https://github.com/reactjs/react-router) (not included) uses hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
 
@@ -127,7 +127,7 @@ Create a `static.json` file to configure the web server for clean [`browserHisto
 }
 ```
 
-#### HTTPS-only
+### HTTPS-only
 
 Enforce secure connections by automatically redirecting insecure requests to **https://**, in `static.json`:
 
@@ -157,13 +157,13 @@ Prevent downgrade attacks with [HTTP strict transport security](https://develope
 
 🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
 
-##### [Set vars on Heroku](https://devcenter.heroku.com/articles/config-vars)
+### [Set vars on Heroku](https://devcenter.heroku.com/articles/config-vars)
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
 ```
 
-##### Set vars for local dev
+### Set vars for local dev
 
 *Requires at least create-react-app 0.7. Earlier versions only support Compile-time.*
 
@@ -174,7 +174,7 @@ REACT_APP_API_URL=http://api.example.com
 REACT_APP_CLIENT_ID=XyzxYzxyZ
 ```
 
-#### Compile-time vs Runtime
+### Compile-time vs Runtime
 
 Two versions of variables are supported. In addition to compile-time variables applied during [build](https://github.com/facebookincubator/create-react-app#npm-run-build) the app supports variables set at runtime, applied as each web dyno starts-up.
 
@@ -189,7 +189,7 @@ ex: `REACT_APP_DEBUG_ASSERTIONS` ([prune code from bundle](https://webpack.githu
 ex: `REACT_APP_API_URL` (transient, external reference) |   | ✓
 ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#add-on-config-vars)) |   | ✓
 
-#### Compile-time configuration
+### Compile-time configuration
 
 ♻️ The app must be re-deployed for compiled changes to take effect.
 
@@ -200,7 +200,7 @@ git commit --allow-empty -m "Set REACT_APP_HELLO config var"
 git push heroku master
 ```
 
-#### Runtime configuration
+### Runtime configuration
 
 *Requires at least create-react-app 0.7.*
 
@@ -231,7 +231,7 @@ class App extends Component {
 
 ⚠️ *Avoid setting backslash escape sequences, such as `\n`, into Runtime config vars. Use literal UTF-8 values only; they will be automatically escaped.*
 
-#### Add-on config vars
+### Add-on config vars
 
 🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
 
