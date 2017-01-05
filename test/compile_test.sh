@@ -1,4 +1,4 @@
-. ${BUILDPACK_TEST_RUNNER_HOME}/lib/test_utils.sh
+. ${BUILDPACK_HOME}/lib/test_utils.sh
 
 test_react_app_0_6_1() {
   cp -r $BUILDPACK_HOME/test/fixtures/react-app-0.6.1/* $BUILD_DIR
