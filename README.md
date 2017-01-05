@@ -4,7 +4,8 @@ Heroku Buildpack for create-react-app
 Deploy React.js web apps generated with [create-react-app](https://github.com/facebookincubator/create-react-app). Automates deployment with the built-in bundler and serves it up via [Nginx](http://nginx.org/en/). See the [introductory blog post](https://blog.heroku.com/deploying-react-with-zero-configuration) and entry in [Heroku elements](https://elements.heroku.com/buildpacks/mars/create-react-app-buildpack).
 
 * ⚠️ [Requirements](#requires)
-* 🚀 [Usage](#usage)
+* 🚀 [Quick Start](#quick-start)
+* [Usage](#usage)
   1. [Generate a React app](#generate-a-react-app)
   1. [Make it a git repo](#make-it-a-git-repo)
   1. [Create the Heroku app](#create-the-heroku-app)
@@ -37,6 +38,26 @@ Requires
 * [create-react-app](https://github.com/facebookincubator/create-react-app)
   * `npm install -g create-react-app`
 
+Quick Start
+-----------
+
+Ensure [requirements](#requires) are met, then execute the following in a terminal.
+
+✏️ *Replace `$APP_NAME` with a name for your unique app.*
+
+```bash
+create-react-app $APP_NAME
+cd $APP_NAME
+git init
+heroku create $APP_NAME --buildpack https://github.com/mars/create-react-app-buildpack.git
+git add .
+git commit -m "Start with create-react-app"
+git push heroku master
+heroku open
+```
+
+For explanation about these steps, continue reading the next section.
+
 Usage
 -----
 
@@ -46,6 +67,8 @@ Usage
 create-react-app my-app
 cd my-app
 ```
+
+* If [yarn](https://yarnpkg.com) is installed locally, the new app will use it instead of [npm](https://www.npmjs.com).
 
 ### Make it a git repo
 
@@ -58,10 +81,10 @@ At this point, this new repo is local, only on your computer. Eventually, you ma
 ### Create the Heroku app
 
 ```bash
-heroku create $my-app-name --buildpack https://github.com/mars/create-react-app-buildpack.git
+heroku create $APP_NAME --buildpack https://github.com/mars/create-react-app-buildpack.git
 ```
 
-✏️ *Replace `$my-app-name` with a name for your unique app.*
+✏️ *Replace `$APP_NAME` with a name for your unique app.*
 
 This command:
 
@@ -73,7 +96,7 @@ This command:
 
 ```bash
 git add .
-git commit -m "react-create-app on Heroku"
+git commit -m "Start with create-react-app"
 git push heroku master
 ```
 
