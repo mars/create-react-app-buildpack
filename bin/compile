@@ -34,6 +34,7 @@ rm -rf $dir
 # Set env vars for the inner buildpacks in `.buildpacks`
 # * install build tooling (devDependencies) with npm & Yarn
 # * used only during compile, as the runtime is a static web server
+export NPM_CONFIG_PRODUCTION=false
 export NODE_ENV=development
 
 echo "=====> Downloading Buildpack: $url"
