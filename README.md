@@ -15,6 +15,7 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
   * [Web server](#web-server)
     * [Routing clean URLs](#routing-clean-urls)
     * [HTTPS-only](#https-only)
+    * [Proxy](#proxy)
   * [Environment variables](#environment-variables)
     * [Set vars on Heroku](#set-vars-on-heroku)
     * [Set vars for local dev](#set-vars-for-local-dev)
@@ -173,6 +174,29 @@ Prevent downgrade attacks with [HTTP strict transport security](https://develope
 ```
 
 * `max-age` is the number of seconds to enforce HTTPS since the last connection; the example is 90-days
+
+### Proxy
+
+Proxy XHR requests from the React UI in the browser to API backends. Prevent same-origin errors when [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) is not available on the backend.
+
+Configure using [Proxy Backends from the static site buildpack](https://github.com/heroku/heroku-buildpack-static/blob/master/README.md#proxy-backends). Add `"proxies"` to `static.json`:
+
+```json
+{
+  "proxies": {
+    "/api/": {
+      "origin": "${API_URL}"
+    }
+  }
+}
+```
+
+Then, point the React UI app to a specific backend API:
+
+```bash
+heroku config:set API_URL="https://api.example.com"
+```
+
 
 ### Environment variables
 
