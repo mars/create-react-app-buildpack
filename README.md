@@ -3,9 +3,10 @@ Heroku Buildpack for create-react-app
 
 Deploy React.js web apps generated with [create-react-app](https://github.com/facebookincubator/create-react-app). Automates deployment with the built-in bundler and serves it up via [Nginx](http://nginx.org/en/). See the [introductory blog post](https://blog.heroku.com/deploying-react-with-zero-configuration) and entry in [Heroku elements](https://elements.heroku.com/buildpacks/mars/create-react-app-buildpack).
 
+* 🚦 [Purpose](#purpose)
 * ⚠️ [Requirements](#requires)
 * 🚀 [Quick Start](#quick-start)
-* [Usage](#usage)
+* 🛠 [Usage](#usage)
   1. [Generate a React app](#generate-a-react-app)
   1. [Make it a git repo](#make-it-a-git-repo)
   1. [Create the Heroku app](#create-the-heroku-app)
@@ -27,6 +28,13 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
 * 🏙 [Architecture](#architecture-)
 
 -----
+
+Purpose
+-------
+
+**This buildpack deploys a React UI as a static web site.** The [Nginx](http://nginx.org/en/) web server provides optimum performance and security for the runtime.
+
+If your goal is to combine React UI + API (Node, Ruby, Python…) into a *single app*, then this buildpack is not the answer. The easiest combined solution is with Node, see: [using create-react-app with a custom Express server](https://github.com/mars/heroku-cra-node).
 
 Requires
 --------
