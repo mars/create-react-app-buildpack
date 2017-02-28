@@ -24,6 +24,7 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
       * [Compile-time config](#compile-time-configuration)
       * [Runtime config](#runtime-configuration)
     * [using an Add-on's config](#add-on-config-vars)
+* 🕵️ [Troubleshooting](#troubleshooting)
 * 📍 [Version compatibility](#version-compatibility)
 * 🏙 [Architecture](#architecture-)
 
@@ -306,6 +307,17 @@ For example, to use the API key for the [Filestack](https://elements.heroku.com/
 ```bash
 export REACT_APP_FILEPICKER_API_KEY=${FILEPICKER_API_KEY:-}
 ```
+
+Troubleshooting
+---------------
+
+1. Check this README to see if it already mentions the issue.
+1. Search our [issues](https://github.com/mars/create-react-app-buildpack/issues?utf8=✓&q=is%3Aissue%20) to see if someone else has experienced the same problem.
+1. Search the internet for mentions of the error message and its subject module, e.g. `ENOENT "node-sass"`
+1. File a new [issue](https://github.com/mars/create-react-app-buildpack/issues/new). Please include:
+  * build log output
+  * link to GitHub repo with the source code (if private, grant read access to @mars)
+
 
 Version compatibility
 ---------------------
