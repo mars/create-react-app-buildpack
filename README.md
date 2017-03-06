@@ -35,7 +35,7 @@ Purpose
 
 **This buildpack deploys a React UI as a static web site.** The [Nginx](http://nginx.org/en/) web server provides optimum performance and security for the runtime.
 
-If your goal is to combine React UI + API (Node, Ruby, Python…) into a *single app*, then this buildpack is not the answer. The easiest combined solution is with Node, see: [using create-react-app with a custom Express server](https://github.com/mars/heroku-cra-node).
+If your goal is to combine React UI + API (Node, Ruby, Python…) into a *single app*, then this buildpack is not the answer. The simplest combined solution is to use [create-react-app + Node.js server](https://github.com/mars/heroku-cra-node).  See also: [create-react-app + Rails 5 server](https://medium.com/superhighfives/a-top-shelf-web-stack-rails-5-api-activeadmin-create-react-app-de5481b7ec0b).
 
 Requires
 --------
