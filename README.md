@@ -297,9 +297,9 @@ Use a custom [`.profile.d` script](https://devcenter.heroku.com/articles/buildpa
 1. make it executable `chmod +x .profile.d/000-react-app-exports.sh`
 1. add an `export` line for each variable:
 
-  ```bash
-  export REACT_APP_ADDON_CONFIG=${ADDON_CONFIG:-}
-  ```
+   ```bash
+   export REACT_APP_ADDON_CONFIG=${ADDON_CONFIG:-}
+   ```
 1. set-up & use [Runtime configuration](#runtime-configuration) to access the variables
 
 For example, to use the API key for the [Filestack](https://elements.heroku.com/addons/filepicker) JS image uploader:
@@ -315,8 +315,8 @@ Troubleshooting
 1. Search our [issues](https://github.com/mars/create-react-app-buildpack/issues?utf8=✓&q=is%3Aissue%20) to see if someone else has experienced the same problem.
 1. Search the internet for mentions of the error message and its subject module, e.g. `ENOENT "node-sass"`
 1. File a new [issue](https://github.com/mars/create-react-app-buildpack/issues/new). Please include:
-  * build log output
-  * link to GitHub repo with the source code (if private, grant read access to @mars)
+   * build log output
+   * link to GitHub repo with the source code (if private, grant read access to @mars)
 
 
 Version compatibility
@@ -341,15 +341,15 @@ Architecture 🏙
 This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
 
 1. [`heroku/nodejs` buildpack](https://github.com/heroku/heroku-buildpack-nodejs)
-  * complete Node.js enviroment to support the webpack build
-  * `node_modules` cached between deployments
+   * complete Node.js enviroment to support the webpack build
+   * `node_modules` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
-  * enables [runtime environment variables](#runtime-configuration)
-  * generates the [default `static.json`](#customization)
-  * performs the production build for create-react-app, `npm run build`
+   * enables [runtime environment variables](#runtime-configuration)
+   * generates the [default `static.json`](#customization)
+   * performs the production build for create-react-app, `npm run build`
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
-  * [Nginx](http://nginx.org/en/) web server
-  * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
+   * [Nginx](http://nginx.org/en/) web server
+   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
 
 
 ### General-purpose SPA deployment
