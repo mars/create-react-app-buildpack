@@ -146,9 +146,9 @@ The default `static.json`, if it does not exist in the repo, is:
 
 ### Routing clean URLs
 
-By default, [React Router](https://github.com/ReactTraining/react-router) (not included) uses hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
+[React Router](https://github.com/ReactTraining/react-router) (not included) may easily use hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
 
-Create a `static.json` file to configure the web server for clean [`browserHistory` URLs with React Router](https://github.com/ReactTraining/react-router/blob/v3/docs/guides/Histories.md#browserhistory):
+Create a `static.json` file to configure the web server for clean [`browserHistory` with React Router v3](https://github.com/ReactTraining/react-router/blob/v3/docs/guides/Histories.md#browserhistory) & [`BrowserRouter` with v4](https://reacttraining.com/react-router/web/api/BrowserRouter):
 
 ```json
 {
@@ -210,7 +210,7 @@ heroku config:set API_URL="https://api.example.com"
 
 ### Environment variables
 
-[`REACT_APP_*` environment variables](https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables) are supported with this buildpack.
+[`REACT_APP_*` environment variables](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) are supported with this buildpack.
 
 🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
 
