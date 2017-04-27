@@ -146,19 +146,20 @@ The default `static.json`, if it does not exist in the repo, is:
 
 ### Routing clean URLs
 
-By default, [React Router](https://github.com/reactjs/react-router) (not included) uses hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
+By default, [React Router](https://github.com/ReactTraining/react-router) (not included) uses hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
 
-Create a `static.json` file to configure the web server for clean [`browserHistory` URLs with React Router](https://github.com/reactjs/react-router/blob/master/docs/guides/Histories.md#browserhistory):
+Create a `static.json` file to configure the web server for clean [`browserHistory` URLs with React Router](https://github.com/ReactTraining/react-router/blob/v3/docs/guides/Histories.md#browserhistory):
 
 ```json
 {
   "root": "build/",
-  "clean_urls": false,
   "routes": {
     "/**": "index.html"
   }
 }
 ```
+
+👓 See [custom routing w/ the static buildpack](https://github.com/heroku/heroku-buildpack-static#custom-routes).
 
 ### HTTPS-only
 
