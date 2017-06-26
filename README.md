@@ -34,7 +34,7 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
 Purpose
 -------
 
-**This buildpack deploys a React UI as a static web site.** The [Nginx](http://nginx.org/en/) web server provides optimum performance and security for the runtime.
+**This buildpack deploys a React UI as a static web site.** The [Nginx](http://nginx.org/en/) web server provides optimum performance and security for the runtime. See [Architecture](#user-content-architecture-) for details.
 
 If your goal is to combine React UI + API (Node, Ruby, Python…) into a *single app*, then this buildpack is not the answer. The simplest combined solution is all javascript:
 
