@@ -3,30 +3,30 @@ Heroku Buildpack for create-react-app
 
 Deploy React.js web apps generated with [create-react-app](https://github.com/facebookincubator/create-react-app). Automates deployment with the built-in bundler and serves it up via [Nginx](http://nginx.org/en/). See the [introductory blog post](https://blog.heroku.com/deploying-react-with-zero-configuration) and entry in [Heroku elements](https://elements.heroku.com/buildpacks/mars/create-react-app-buildpack).
 
-* 🚦 [Purpose](#purpose)
-* ⚠️ [Requirements](#requires)
-* 🚀 [Quick Start](#quick-start)
-* 🛠 [Usage](#usage)
-  1. [Generate a React app](#generate-a-react-app)
-  1. [Make it a git repo](#make-it-a-git-repo)
-  1. [Create the Heroku app](#create-the-heroku-app)
-  1. [Commit & deploy ♻️](#commit--deploy-️)
-  1. [Continue Development](#continue-development)
-* 👓 [Customization](#customization)
-  * [Web server](#web-server)
-    * [Routing clean URLs](#routing-clean-urls)
-    * [HTTPS-only](#https-only)
-    * [Proxy](#proxy)
-  * [Environment variables](#environment-variables)
-    * [Set vars on Heroku](#set-vars-on-heroku)
-    * [Set vars for local dev](#set-vars-for-local-dev)
-    * [Compile-time vs Runtime](#compile-time-vs-runtime)
-      * [Compile-time config](#compile-time-configuration)
-      * [Runtime config](#runtime-configuration)
-    * [using an Add-on's config](#add-on-config-vars)
-* 🕵️ [Troubleshooting](#troubleshooting)
-* 📍 [Version compatibility](#version-compatibility)
-* 🏙 [Architecture](#architecture-)
+* 🚦 [Purpose](#user-content-purpose)
+* ⚠️ [Requirements](#user-content-requires)
+* 🚀 [Quick Start](#user-content-quick-start)
+* 🛠 [Usage](#user-content-usage)
+  1. [Generate a React app](#user-content-generate-a-react-app)
+  1. [Make it a git repo](#user-content-make-it-a-git-repo)
+  1. [Create the Heroku app](#user-content-create-the-heroku-app)
+  1. [Commit & deploy ♻️](#user-content-commit--deploy-️)
+  1. [Continue Development](#user-content-continue-development)
+* 👓 [Customization](#user-content-customization)
+  * [Web server](#user-content-web-server)
+    * [Routing clean URLs](#user-content-routing-clean-urls)
+    * [HTTPS-only](#user-content-https-only)
+    * [Proxy](#user-content-proxy)
+  * [Environment variables](#user-content-environment-variables)
+    * [Set vars on Heroku](#user-content-set-vars-on-heroku)
+    * [Set vars for local dev](#user-content-set-vars-for-local-dev)
+    * [Compile-time vs Runtime](#user-content-compile-time-vs-runtime)
+      * [Compile-time config](#user-content-compile-time-configuration)
+      * [Runtime config](#user-content-runtime-configuration)
+    * [using an Add-on's config](#user-content-add-on-config-vars)
+* 🕵️ [Troubleshooting](#user-content-troubleshooting)
+* 📍 [Version compatibility](#user-content-version-compatibility)
+* 🏙 [Architecture](#user-content-architecture-)
 
 -----
 
@@ -35,7 +35,11 @@ Purpose
 
 **This buildpack deploys a React UI as a static web site.** The [Nginx](http://nginx.org/en/) web server provides optimum performance and security for the runtime.
 
-If your goal is to combine React UI + API (Node, Ruby, Python…) into a *single app*, then this buildpack is not the answer. The simplest combined solution is to use [create-react-app + Node.js server](https://github.com/mars/heroku-cra-node).  See also: [create-react-app + Rails 5 server](https://medium.com/superhighfives/a-top-shelf-web-stack-rails-5-api-activeadmin-create-react-app-de5481b7ec0b).
+If your goal is to combine React UI + API (Node, Ruby, Python…) into a *single app*, then this buildpack is not the answer. The simplest combined solution is all javascript:
+
+▶️ **[create-react-app + Node.js server](https://github.com/mars/heroku-cra-node)** on Heroku
+
+Combination with other languages is possible too, like [create-react-app + Rails 5 server](https://medium.com/superhighfives/a-top-shelf-web-stack-rails-5-api-activeadmin-create-react-app-de5481b7ec0b).
 
 Requires
 --------
@@ -51,7 +55,7 @@ Requires
 Quick Start
 -----------
 
-Ensure [requirements](#requires) are met, then execute the following in a terminal.
+Ensure [requirements](#user-content-requires) are met, then execute the following in a terminal.
 
 ✏️ *Replace `$APP_NAME` with a name for your unique app.*
 
@@ -86,7 +90,7 @@ cd my-app
 git init
 ```
 
-At this point, this new repo is local, only on your computer. Eventually, you may want to [push to Github](#push-to-github).
+At this point, this new repo is local, only on your computer. Eventually, you may want to [push to Github](#user-content-push-to-github).
 
 ### Create the Heroku app
 
@@ -235,7 +239,7 @@ REACT_APP_CLIENT_ID=XyzxYzxyZ
 
 Two versions of variables are supported. In addition to compile-time variables applied during [build](https://github.com/facebookincubator/create-react-app#npm-run-build) the app supports variables set at runtime, applied as each web dyno starts-up.
 
-Requirement | [Compile-time](#compile-time-configuration) | [Runtime](#runtime-configuration)
+Requirement | [Compile-time](#user-content-compile-time-configuration) | [Runtime](#user-content-runtime-configuration)
 :--- |:---:|:---: 
 never changes for a build | ✓ |  
 support for [continuous delivery](https://www.heroku.com/continuous-delivery) |  | ✓
@@ -244,7 +248,7 @@ different values for staging & production (in a [pipeline](https://devcenter.her
 ex: `REACT_APP_BUILD_VERSION` (static fact about the bundle) | ✓ | 
 ex: `REACT_APP_DEBUG_ASSERTIONS` ([prune code from bundle](https://webpack.github.io/docs/list-of-plugins.html#defineplugin)) | ✓ | 
 ex: `REACT_APP_API_URL` (transient, external reference) |   | ✓
-ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#add-on-config-vars)) |   | ✓
+ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#user-content-add-on-config-vars)) |   | ✓
 
 ### Compile-time configuration
 
@@ -301,7 +305,7 @@ Use a custom [`.profile.d` script](https://devcenter.heroku.com/articles/buildpa
    ```bash
    export REACT_APP_ADDON_CONFIG=${ADDON_CONFIG:-}
    ```
-1. set-up & use [Runtime configuration](#runtime-configuration) to access the variables
+1. set-up & use [Runtime configuration](#user-content-runtime-configuration) to access the variables
 
 For example, to use the API key for the [Filestack](https://elements.heroku.com/addons/filepicker) JS image uploader:
 
@@ -323,7 +327,7 @@ Troubleshooting
 Version compatibility
 ---------------------
 
-This buildpack will never intentionally cause previously deployed apps to become undeployable. Using master [as directed in the main instructions](#create-the-heroku-app) will always deploy an app with the most recent version of this buildpack.
+This buildpack will never intentionally cause previously deployed apps to become undeployable. Using master [as directed in the main instructions](#user-content-create-the-heroku-app) will always deploy an app with the most recent version of this buildpack.
 
 [Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock an app to a specific version, if that kind of determinism pleases you:
 
@@ -345,8 +349,8 @@ This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildp
    * complete Node.js enviroment to support the webpack build
    * `node_modules` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
-   * enables [runtime environment variables](#runtime-configuration)
-   * generates the [default `static.json`](#customization)
+   * enables [runtime environment variables](#user-content-runtime-configuration)
+   * generates the [default `static.json`](#user-content-customization)
    * performs the production build for create-react-app, `npm run build`
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
    * [Nginx](http://nginx.org/en/) web server
@@ -360,4 +364,4 @@ This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildp
 This buildpack can deploy any SPA [single-page app] as long as it meets the following requirements:
 
 * `npm run build` performs the transpile/bundling
-* the file `build/index.html` or [the root specified in `static.json`](#customization) exists at runtime.
+* the file `build/index.html` or [the root specified in `static.json`](#user-content-customization) exists at runtime.
