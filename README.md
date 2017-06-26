@@ -185,6 +185,7 @@ Enforce secure connections by automatically redirecting insecure requests to **h
 
 ```json
 {
+  "root": "build/",
   "https_only": true
 }
 ```
@@ -193,6 +194,8 @@ Prevent downgrade attacks with [HTTP strict transport security](https://develope
 
 ```json
 {
+  "root": "build/",
+  "https_only": true,
   "headers": {
     "/**": {
       "Strict-Transport-Security": "max-age=7776000"
@@ -211,6 +214,7 @@ Configure using [Proxy Backends from the static site buildpack](https://github.c
 
 ```json
 {
+  "root": "build/",
   "proxies": {
     "/api/": {
       "origin": "${API_URL}"
