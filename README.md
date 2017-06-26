@@ -13,6 +13,7 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
   1. [Commit & deploy ♻️](#user-content-commit--deploy-️)
   1. [Continue Development](#user-content-continue-development)
 * 👓 [Customization](#user-content-customization)
+  * [Procfile](#user-content-procfile)
   * [Web server](#user-content-web-server)
     * [Routing clean URLs](#user-content-routing-clean-urls)
     * [HTTPS-only](#user-content-https-only)
@@ -70,7 +71,10 @@ git push heroku master
 heroku open
 ```
 
-For explanation about these steps, continue reading the next section.
+Once deployed, [continue development](#user-content-continue-development) 🌱
+
+For explanation about these steps, continue reading the [next section](#user-content-usage).
+
 
 Usage
 -----
@@ -137,6 +141,16 @@ Eventually, to share, collaborate, or simply back-up your code, [create an empty
 
 Customization
 -------------
+
+### Procfile
+
+Heroku apps declared what processes are launched for a successful deployment by way of the [`Procfile`](https://devcenter.heroku.com/articles/procfile). This buildpack's default process comes from [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static). (See: 🏙 [Architecture](#user-content-architecture-)). The implicit `Procfile` to start the static web server is:
+
+```
+web: bin/boot
+```
+
+To customize an app's processes, commit a `Procfile` and deploy. Include `web: bin/boot` to launch the default web process, or you may replace the default web process. Additional [process types](https://devcenter.heroku.com/articles/procfile#declaring-process-types) may be added to run any number of dynos with whatever arbitrary commands you want, and scale each independently.
 
 ### Web server
 
