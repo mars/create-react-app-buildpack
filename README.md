@@ -12,6 +12,8 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
   1. [Create the Heroku app](#user-content-create-the-heroku-app)
   1. [Commit & deploy ♻️](#user-content-commit--deploy-️)
   1. [Continue Development](#user-content-continue-development)
+  1. [Push to Github](#user-content-push-to-github)
+  1. [Testing](#user-content-testing)
 * 👓 [Customization](#user-content-customization)
   * [Procfile](#user-content-procfile)
   * [Web server](#user-content-web-server)
@@ -138,6 +140,11 @@ Then, commit & deploy ♻️
 
 Eventually, to share, collaborate, or simply back-up your code, [create an empty repo at Github](https://github.com/new), and then follow the instructions shown on the repo to **push an existing repository from the command line**.
 
+### Testing
+
+Use [create-react-app's built-in Jest testing](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#user-content-running-tests) or whatever testing library you prefer. 
+
+As long as tests can be run with `npm test` (like the built-in Jest testing) then it will work effortlessly with [Heroku CI](https://devcenter.heroku.com/articles/heroku-ci).
 
 Customization
 -------------
