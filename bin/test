@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# bin/test-compile BUILD_DIR CACHE_DIR ENV_DIR
+
+# Hint to the test runner to exit when complete instead of watching.
+export CI=true
+
+# Test runner copied from Node buildpack:
+# https://github.com/heroku/heroku-buildpack-nodejs/blob/master/bin/test
+
+BUILD_DIR=${1:-}
+if yarn --version > /dev/null 2>&1; then
+  cd "$BUILD_DIR" && yarn test
+else
+  cd "$BUILD_DIR" && npm test
+fi
