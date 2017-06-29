@@ -146,6 +146,20 @@ Use [create-react-app's built-in Jest testing](https://github.com/facebookincuba
 
 As long as tests can be run with `npm test` (like the built-in Jest testing) then it will work effortlessly with [Heroku CI](https://devcenter.heroku.com/articles/heroku-ci).
 
+#### Minimal `app.json`
+
+Heroku CI uses [`app.json`](https://devcenter.heroku.com/articles/app-json-schema) to provision test apps. To enable Heroku CI, commit this minimal example `app.json`:
+
+```json
+{
+  "buildpacks": [
+    {
+      "url": "https://github.com/mars/create-react-app-buildpack"
+    }
+  ]
+}
+```
+
 Customization
 -------------
 
