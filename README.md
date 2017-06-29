@@ -173,6 +173,8 @@ web: bin/boot
 
 To customize an app's processes, commit a `Procfile` and deploy. Include `web: bin/boot` to launch the default web process, or you may replace the default web process. Additional [process types](https://devcenter.heroku.com/articles/procfile#declaring-process-types) may be added to run any number of dynos with whatever arbitrary commands you want, and scale each independently.
 
+🚦 *If replacing the default web process, please check this buildpack's [Purpose](#user-content-purpose) to avoid misusing this buildpack (such as running a Node server) which can lead to confusing deployment issues.*
+
 ### Web server
 
 The web server may be [configured via the static buildpack](https://github.com/heroku/heroku-buildpack-static#configuration).
