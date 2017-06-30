@@ -233,7 +233,11 @@ Prevent downgrade attacks with [HTTP strict transport security](https://develope
 
 Proxy XHR requests from the React UI in the browser to API backends. Prevent same-origin errors when [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) is not available on the backend.
 
-Configure using [Proxy Backends from the static site buildpack](https://github.com/heroku/heroku-buildpack-static/blob/master/README.md#proxy-backends). Add `"proxies"` to `static.json`:
+#### Proxy for deployment
+
+The [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static) (see: 🏙 [Architecture](#user-content-architecture-))  provides [Proxy Backends configuration](https://github.com/heroku/heroku-buildpack-static/blob/master/README.md#proxy-backends) to utilize  Nginx for high-performance proxies in production.
+
+Add `"proxies"` to `static.json`:
 
 ```json
 {
@@ -251,6 +255,27 @@ Then, point the React UI app to a specific backend API:
 ```bash
 heroku config:set API_URL="https://api.example.com"
 ```
+
+#### Proxy for local development
+
+create-react-app itself provides a built-in [proxy for development](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#user-content-proxying-api-requests-in-development). This may be configured to match the behavior of [proxy for deployment](#user-content-proxy-for-deployment).
+
+Add `"proxy"` to `package.json`:
+
+```json
+{
+  "proxy": {
+    "/api": {
+      "target": "http://localhost:8000",
+      "pathRewrite": {
+        "^/api": "/"
+      }
+    }
+  }
+}
+```
+
+Replace `http://localhost:8000` with the URL to your local or remote backend service.
 
 
 ### Environment variables
