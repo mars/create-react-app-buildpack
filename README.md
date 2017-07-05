@@ -142,13 +142,13 @@ Eventually, to share, collaborate, or simply back-up your code, [create an empty
 
 ### Testing
 
-Use [create-react-app's built-in Jest testing](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#user-content-running-tests) or whatever testing library you prefer. 
+Use [create-react-app's built-in Jest testing](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#user-content-running-tests) or whatever testing library you prefer.
 
-As long as tests can be run with `npm test` (like the built-in Jest testing) then it will work effortlessly with [Heroku CI](https://devcenter.heroku.com/articles/heroku-ci).
+[Heroku CI](https://devcenter.heroku.com/articles/heroku-ci) is supported with minimal configuration. The CI integration is compatible with npm & yarn (see [`bin/test`](bin/test)).
 
 #### Minimal `app.json`
 
-Heroku CI uses [`app.json`](https://devcenter.heroku.com/articles/app-json-schema) to provision test apps. To enable Heroku CI, commit this minimal example `app.json`:
+Heroku CI uses [`app.json`](https://devcenter.heroku.com/articles/app-json-schema) to provision test apps. To support Heroku CI, commit this minimal example `app.json`:
 
 ```json
 {
@@ -231,7 +231,21 @@ Prevent downgrade attacks with [HTTP strict transport security](https://develope
 
 ### Proxy
 
-Proxy XHR requests from the React UI in the browser to API backends. Prevent same-origin errors when [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) is not available on the backend.
+Proxy XHR requests from the React UI in the browser to API backends. Use to prevent same-origin errors when [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) is not supported on the backend.
+
+#### Proxy URL prefix
+
+To make calls through the proxy, use relative URL's in the React app which will be proxied to the configured target URL. For the example URL prefix of `/api/`, here's how the proxy would rewrite the requests:
+
+```
+/api/search-items
+  → https://backend.example.com/search-items
+  
+/api/users/me
+  → https://backend.example.com/users/me
+```
+
+You may choose any prefix and may have multiple proxies with different prefixes.
 
 #### Proxy for deployment
 
@@ -253,7 +267,7 @@ Add `"proxies"` to `static.json`:
 Then, point the React UI app to a specific backend API:
 
 ```bash
-heroku config:set API_URL="https://api.example.com"
+heroku config:set API_URL="https://backend.example.com"
 ```
 
 #### Proxy for local development
@@ -422,6 +436,7 @@ This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildp
    * [Nginx](http://nginx.org/en/) web server
    * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
 
+Runtime processes are launched based on the last buildpack's [Procfile](#user-content-procfile).
 
 ### General-purpose SPA deployment
 
