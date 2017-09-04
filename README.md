@@ -165,7 +165,7 @@ Customization
 
 ### Procfile
 
-Heroku apps declared what processes are launched for a successful deployment by way of the [`Procfile`](https://devcenter.heroku.com/articles/procfile). This buildpack's default process comes from [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static). (See: 🏙 [Architecture](#user-content-architecture-)). The implicit `Procfile` to start the static web server is:
+Heroku apps may declare what processes are launched for a successful deployment by way of the [`Procfile`](https://devcenter.heroku.com/articles/procfile). This buildpack's default process comes from [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static). (See: 🏙 [Architecture](#user-content-architecture-)). The implicit `Procfile` to start the static web server is:
 
 ```
 web: bin/boot
