@@ -423,20 +423,24 @@ heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v1.
 Architecture 🏙
 ------------
 
-This buildpack composes several buildpacks (specified in [`.buildpacks`](.buildpacks)) to support **no-configuration deployment** on Heroku:
+This buildpack combines several buildpacks, specified in [`.buildpacks`](.buildpacks), to support **zero-configuration deployment** on Heroku:
 
 1. [`heroku/nodejs` buildpack](https://github.com/heroku/heroku-buildpack-nodejs)
-   * complete Node.js enviroment to support the webpack build
-   * `node_modules` cached between deployments
+   * installs complete `node`, puts it on the `$PATH`
+   * version specified in [`package.json`, `engines.node`](https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version)
+   * `node_modules/` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
-   * enables [runtime environment variables](#user-content-runtime-configuration)
+   * production build for create-react-app, `npm run build`
    * generates the [default `static.json`](#user-content-customization)
-   * performs the production build for create-react-app, `npm run build`
+   * enables [runtime environment variables](#user-content-runtime-configuration)
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
    * [Nginx](http://nginx.org/en/) web server
-   * handy static website & SPA (single-page app) [customization options](https://github.com/heroku/heroku-buildpack-static#configuration)
+   * launches via `bin/boot`
+   * configure via `static.json`; see [options specific to this buildpack](#user-conter-web-server) and [all options](https://github.com/heroku/heroku-buildpack-static#configuration)
 
-Runtime processes are launched based on the last buildpack's [Procfile](#user-content-procfile).
+Runtime processes are launched based on the last buildpack's default processes, the static buildpack's Nginx web server. Processes may be customized with a [Procfile](#user-content-procfile).
+
+
 
 ### General-purpose SPA deployment
 
