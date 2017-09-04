@@ -430,16 +430,15 @@ This buildpack combines several buildpacks, specified in [`.buildpacks`](.buildp
    * version specified in [`package.json`, `engines.node`](https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version)
    * `node_modules/` cached between deployments
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
-   * production build for create-react-app, `npm run build`
-   * generates the [default `static.json`](#user-content-customization)
-   * enables [runtime environment variables](#user-content-runtime-configuration)
+   * production build for create-react-app
+   * generates the [default `static.json`](#user-content-web-server)
+   * enables [runtime environment variables](#user-content-environment-variables)
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
    * [Nginx](http://nginx.org/en/) web server
    * launches via `bin/boot`
-   * configure via `static.json`; see [options specific to this buildpack](#user-conter-web-server) and [all options](https://github.com/heroku/heroku-buildpack-static#configuration)
+   * configure via `static.json`; see [options specific to this buildpack](#user-content-web-server) and [all options](https://github.com/heroku/heroku-buildpack-static#configuration)
 
 Runtime processes are launched based on the last buildpack's default processes, the static buildpack's Nginx web server. Processes may be customized with a [Procfile](#user-content-procfile).
-
 
 
 ### General-purpose SPA deployment
