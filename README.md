@@ -396,6 +396,26 @@ export REACT_APP_FILEPICKER_API_KEY=${FILEPICKER_API_KEY:-}
 Troubleshooting
 ---------------
 
+1. Confirm that your app is using this buildpack:
+
+    ```bash
+    heroku buildpacks
+    ```
+    
+    If it's not using `create-react-app-buildpack`, then set it:
+
+    ```bash
+    heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git
+    ```
+
+    …and deploy with the new buildpack:
+
+    ```bash
+    git commit --allow-empty -m 'Switch to create-react-app-buildpack'
+    git push heroku master
+    ```
+    
+    If the error still occurs, then at least we know it's really using this buildpack! Proceed with troubleshooting.
 1. Check this README to see if it already mentions the issue.
 1. Search our [issues](https://github.com/mars/create-react-app-buildpack/issues?utf8=✓&q=is%3Aissue%20) to see if someone else has experienced the same problem.
 1. Search the internet for mentions of the error message and its subject module, e.g. `ENOENT "node-sass"`
