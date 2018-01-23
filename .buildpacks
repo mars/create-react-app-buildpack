@@ -1,4 +1,4 @@
 https://github.com/debitoor/ssh-private-key-buildpack.git
 https://github.com/heroku/heroku-buildpack-nodejs.git
 https://github.com/mars/create-react-app-inner-buildpack.git#v3.0.0
-https://github.com/keepworks/heroku-buildpack-static.git
+https://github.com/heroku/heroku-buildpack-static.git
