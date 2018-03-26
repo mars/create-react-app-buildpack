@@ -27,6 +27,7 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
       * [Compile-time config](#user-content-compile-time-configuration)
       * [Runtime config](#user-content-runtime-configuration)
     * [using an Add-on's config](#user-content-add-on-config-vars)
+  * [npm Private Packages](#user-content-npm-private-packages)
 * 🕵️ [Troubleshooting](#user-content-troubleshooting)
 * 📍 [Version compatibility](#user-content-version-compatibility)
 * 🏙 [Architecture](#user-content-architecture-)
@@ -392,6 +393,17 @@ For example, to use the API key for the [Filestack](https://elements.heroku.com/
 ```bash
 export REACT_APP_FILEPICKER_API_KEY=${FILEPICKER_API_KEY:-}
 ```
+
+npm Private Packages
+-------------------
+Private modules are supported during build.
+
+1. Setup your app with a `.npmrc` file following [npm's guide for CI/deployment](https://docs.npmjs.com/private-modules/ci-server-config).
+1. Set your secret in the `NPM_TOKEN` config var:
+
+    ```bash
+    heroku config:set NPM_TOKEN=xxxxx
+    ```
 
 Troubleshooting
 ---------------
