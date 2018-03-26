@@ -36,6 +36,7 @@ echo "-----> Configure create-react-app build environment"
 # * during compile, install build tooling (devDependencies) with npm & Yarn
 # * in runtime, NODE_ENV is not used (this buildpack launches a static web server)
 export NPM_CONFIG_PRODUCTION=false
+export YARN_PRODUCTION=false
 INHERITED_NODE_ENV="${NODE_ENV:-development}"
 if [ "$INHERITED_NODE_ENV" = "production" ]
   then
