@@ -10,44 +10,69 @@ set -u
 # Debug, echo every command
 #set -x
 
-function indent() {
-  c='s/^/       /'
-  case $(uname) in
-    Darwin) sed -l "$c";;
-    *)      sed -u "$c";;
-  esac
-}
-
 BUILD_DIR=$1
 CACHE_DIR=$2
 ENV_DIR=$3
 BP_DIR=`cd $(dirname $0); cd ..; pwd`
 
-# Use architecture of multi-buildpack to compose behavior.
-# https://github.com/heroku/heroku-buildpack-multi
-cp $BP_DIR/.buildpacks $BUILD_DIR/.buildpacks
-url=https://github.com/heroku/heroku-buildpack-multi.git
+url=https://github.com/heroku/heroku-buildpack-nodejs.git
 branch=""
 dir=$(mktemp -t buildpackXXXXX)
 rm -rf $dir
 
-echo "-----> Configure create-react-app build environment"
-# Set env vars for the inner buildpacks in `.buildpacks`
-# * during compile, install build tooling (devDependencies) with npm & Yarn
-# * in runtime, NODE_ENV is not used (this buildpack launches a static web server)
-export NPM_CONFIG_PRODUCTION=false
-INHERITED_NODE_ENV="${NODE_ENV:-development}"
-if [ "$INHERITED_NODE_ENV" = "production" ]
-  then
-  echo '       Setting `NODE_ENV=development` to install dependencies for `npm build`'
-  export NODE_ENV=development
-else
-  echo "       Using \`NODE_ENV=${INHERITED_NODE_ENV}\`"
-  export NODE_ENV="${INHERITED_NODE_ENV}"
+echo "-----> Setup app for Node/Express server"
+shopt -s dotglob
+# Move root-level app into react-ui/ subdirectory
+mkdir -p $CACHE_DIR/original-build
+mv $BUILD_DIR/* $CACHE_DIR/original-build/
+mkdir -p $BUILD_DIR/react-ui
+mv $CACHE_DIR/original-build/* $BUILD_DIR/react-ui/
+# Copy over the Express server
+cp -r $BP_DIR/server $BP_DIR/package.json $BP_DIR/package-lock.json $BUILD_DIR/
+# Indicate when the legacy static server config file is present
+if [ -f "$BUILD_DIR/react-ui/static.json" ]
+then
+  echo '       Using `static.json`'
 fi
+shopt -u dotglob
 
-echo "=====> Downloading Buildpack: $url"
+echo "-----> Configure environments"
+export_env_dir() {
+  local env_dir=$1
+  local whitelist_regex=${2:-''}
+  local blacklist_regex=${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|IFS)$'}
+  if [ -d "$env_dir" ]; then
+    for e in $(ls $env_dir); do
+      echo "$e" | grep -E "$whitelist_regex" | grep -qvE "$blacklist_regex" &&
+      export "$e=$(cat $env_dir/$e)"
+      :
+    done
+  fi
+}
 
+echo '       Enabling runtime environment variables'
+
+cra_dir="$BUILD_DIR/.heroku/create-react-app"
+mkdir -p "$cra_dir"
+cp "$BP_DIR/lib/injectable_env.rb" "$cra_dir/"
+
+profile_d_dir="$BUILD_DIR/.profile.d"
+mkdir -p "$profile_d_dir"
+cp "$BP_DIR/.profile.d/inject_react_app_env.sh" "$profile_d_dir/"
+
+cd $BP_DIR
+
+echo '       Enabling compile-time environment variables'
+# Support env vars during build:
+# * `REACT_APP_*`
+#   * https://github.com/facebookincubator/create-react-app/blob/v0.2.3/template/README.md#adding-custom-environment-variables
+# * `NODE_*`, especially for `NODE_PATH`
+#   * https://github.com/facebookincubator/create-react-app/pull/476
+# * `NPM_*`, especially for `NPM_TOKEN`
+#   * https://docs.npmjs.com/private-modules/ci-server-config
+export_env_dir "$ENV_DIR" '^(REACT_APP_|NODE_|NPM_)'
+
+echo "-----> Downloading buildpack: $url"
 if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then
   mkdir -p "$dir"
   curl -s "$url" | tar xvz -C "$dir" >/dev/null 2>&1
@@ -65,13 +90,12 @@ chmod -f +x $dir/bin/{detect,compile,release}
 framework=$($dir/bin/detect $1)
 
 if [ $? == 0 ]; then
-  echo "=====> Detected Framework: $framework"
   $dir/bin/compile $BUILD_DIR $CACHE_DIR $ENV_DIR
 
   if [ $? != 0 ]; then
     exit 1
   fi
 else
-  echo "create-react-app `.buildpacks` not defined. Exiting."
+  echo "create-react-app requires `package.json`"
   exit 1
 fi
