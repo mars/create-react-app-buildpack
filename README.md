@@ -47,3 +47,18 @@ git commit -m "🌱 create-react-app"
 git push heroku master
 heroku open
 ```
+
+Custom Node server
+------------------
+
+All customizations to the runtime of this buildpack are enabled by adding a Node server to the app, and then the server can be customized to do pretty much anything you can program in javascript. To enable a custom server, the app layout must be re-arranged to:
+
+```bash
+package.json
+react-ui/
+  package.json
+  …
+server/
+  index.js
+  …
+```

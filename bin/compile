@@ -20,15 +20,31 @@ branch=""
 dir=$(mktemp -t buildpackXXXXX)
 rm -rf $dir
 
-echo "-----> Setup app for Node/Express server"
+echo "-----> Setup app"
 shopt -s dotglob
-# Move root-level app into react-ui/ subdirectory
-mkdir -p $CACHE_DIR/original-build
-mv $BUILD_DIR/* $CACHE_DIR/original-build/
-mkdir -p $BUILD_DIR/react-ui
-mv $CACHE_DIR/original-build/* $BUILD_DIR/react-ui/
-# Copy over the Express server
-cp -r $BP_DIR/server $BP_DIR/package.json $BP_DIR/package-lock.json $BUILD_DIR/
+react_app_compat_with_custom_server=false
+
+if [ -f "$BUILD_DIR/react-ui/package.json" ]
+then
+  echo '       Found `react-ui/package.json`'
+  react_app_compat_with_custom_server=true
+else
+  echo '       Moving React app into place'
+  react_app_compat_with_custom_server=false
+  mkdir -p $CACHE_DIR/original-build
+  mv $BUILD_DIR/* $CACHE_DIR/original-build/
+  mkdir -p $BUILD_DIR/react-ui
+  mv $CACHE_DIR/original-build/* $BUILD_DIR/react-ui/
+fi
+
+if [ "$react_app_compat_with_custom_server" = true -a -f "$BUILD_DIR/server/index.js" -a -f "$BUILD_DIR/package.json" ]
+then
+  echo '       Found `server/index.js`'
+else
+  echo '       Using default Node/Express server'
+  cp -r $BP_DIR/server $BP_DIR/package.json $BP_DIR/package-lock.json $BUILD_DIR/
+fi
+
 shopt -u dotglob
 
 echo "-----> Configure environments"
