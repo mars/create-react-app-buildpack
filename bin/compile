@@ -29,11 +29,6 @@ mkdir -p $BUILD_DIR/react-ui
 mv $CACHE_DIR/original-build/* $BUILD_DIR/react-ui/
 # Copy over the Express server
 cp -r $BP_DIR/server $BP_DIR/package.json $BP_DIR/package-lock.json $BUILD_DIR/
-# Indicate when the legacy static server config file is present
-if [ -f "$BUILD_DIR/react-ui/static.json" ]
-then
-  echo '       Using `static.json`'
-fi
 shopt -u dotglob
 
 echo "-----> Configure environments"
