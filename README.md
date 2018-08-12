@@ -458,19 +458,24 @@ Architecture 🏙
 This buildpack combines several buildpacks, specified in [`.buildpacks`](.buildpacks), to support **zero-configuration deployment** on Heroku:
 
 1. [`heroku/nodejs` buildpack](https://github.com/heroku/heroku-buildpack-nodejs)
-   * installs complete `node`, puts it on the `$PATH`
+   * installs `node`, puts on the `$PATH`
    * version specified in [`package.json`, `engines.node`](https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version)
    * `node_modules/` cached between deployments
+   * `NODE_ENV` at buildtime:
+     * defaults to `NODE_ENV=development` to install the build tooling of create-react-app's dev dependencies, like `react-scripts`
+     * honors specific setting of `NODE_ENV`, like `NODE_ENV=test` for [automated testing](#user-content-testing) in [`bin/test`](bin/test)
+     * but forces `NODE_ENV=production` to be `development` to ensure dev dependencies are available for build
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
    * production build for create-react-app
-   * generates the [default `static.json`](#user-content-web-server)
+     * executes the package's build script; create-react-app default is `react-scripts build`
+     * generates a production bundle regardless of `NODE_ENV` setting
+   * sets default [web server config](#user-content-web-server) unless `static.json` already exists
    * enables [runtime environment variables](#user-content-environment-variables)
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
    * [Nginx](http://nginx.org/en/) web server
-   * launches via `bin/boot`
-   * configure via `static.json`; see [options specific to this buildpack](#user-content-web-server) and [all options](https://github.com/heroku/heroku-buildpack-static#configuration)
+   * [configure with `static.json`](#user-content-web-server) (see [config static web server](https://github.com/heroku/heroku-buildpack-static#user-content-configuration)
 
-Runtime processes are launched based on the last buildpack's default processes, the static buildpack's Nginx web server. Processes may be customized with a [Procfile](#user-content-procfile).
+🚀 The runtime `web` process is the [last buildpack](https://github.com/mars/create-react-app-buildpack/blob/master/.buildpacks)'s default processes. heroku-buildpack-static uses [`bin/boot`](https://github.com/heroku/heroku-buildpack-static/blob/master/bin/release) to launch its Nginx web server. Processes may be customized by committing a [Procfile](#user-content-procfile) to the app.
 
 
 ### General-purpose SPA deployment
