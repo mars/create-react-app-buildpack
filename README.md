@@ -67,7 +67,7 @@ Ensure [requirements](#user-content-requires) are met, then execute the followin
 create-react-app $APP_NAME
 cd $APP_NAME
 git init
-heroku create $APP_NAME --buildpack https://github.com/mars/create-react-app-buildpack.git
+heroku create $APP_NAME --buildpack mars/create-react-app
 git add .
 git commit -m "Start with create-react-app"
 git push heroku master
@@ -102,7 +102,7 @@ At this point, this new repo is local, only on your computer. Eventually, you ma
 ### Create the Heroku app
 
 ```bash
-heroku create $APP_NAME --buildpack https://github.com/mars/create-react-app-buildpack.git
+heroku create $APP_NAME --buildpack mars/create-react-app
 ```
 
 ✏️ *Replace `$APP_NAME` with a name for your unique app.*
@@ -155,7 +155,7 @@ Heroku CI uses [`app.json`](https://devcenter.heroku.com/articles/app-json-schem
 {
   "buildpacks": [
     {
-      "url": "https://github.com/mars/create-react-app-buildpack"
+      "url": "mars/create-react-app"
     }
   ]
 }
@@ -417,7 +417,7 @@ Troubleshooting
     If it's not using `create-react-app-buildpack`, then set it:
 
     ```bash
-    heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git
+    heroku buildpacks:set mars/create-react-app
     ```
 
     …and deploy with the new buildpack:
