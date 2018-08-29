@@ -387,6 +387,12 @@ To solve this so the runtime can locate the bundle, set the custom bundle path:
 heroku config:set JS_RUNTIME_TARGET_BUNDLE=/app/my/custom/path/js/main.*.js
 ```
 
+To unset this config and use the default path for **create-react-app**'s bundle, `/app/build/static/js/main.*.js`:
+
+```bash
+heroku config:unset JS_RUNTIME_TARGET_BUNDLE
+```
+
 ### Add-on config vars
 
 🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
