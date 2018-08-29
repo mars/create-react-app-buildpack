@@ -186,6 +186,10 @@ The default `static.json`, if it does not exist in the repo, is:
 { "root": "build/" }
 ```
 
+### Changing the root
+
+If a different web server `"root"` is specified, such as with a highly customized, ejected create-react-app project, then the new bundle location may need to be [set to enable runtime environment variables](#user-content-custom-bundle-location).
+
 ### Routing clean URLs
 
 [React Router](https://github.com/ReactTraining/react-router) (not included) may easily use hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
@@ -372,6 +376,22 @@ class App extends Component {
 ```
 
 ⚠️ *Avoid setting backslash escape sequences, such as `\n`, into Runtime config vars. Use literal UTF-8 values only; they will be automatically escaped.*
+
+#### Custom bundle location
+
+If the javascript bundle location is customized, such as with an ejected created-react-app project, then the runtime may not  be able to locate the bundle to inject runtime variables.
+
+To solve this so the runtime can locate the bundle, set the custom bundle path:
+
+```bash
+heroku config:set JS_RUNTIME_TARGET_BUNDLE=/app/my/custom/path/js/main.*.js
+```
+
+To unset this config and use the default path for **create-react-app**'s bundle, `/app/build/static/js/main.*.js`:
+
+```bash
+heroku config:unset JS_RUNTIME_TARGET_BUNDLE
+```
 
 ### Add-on config vars
 
