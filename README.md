@@ -26,6 +26,7 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
     * [Compile-time vs Runtime](#user-content-compile-time-vs-runtime)
       * [Compile-time config](#user-content-compile-time-configuration)
       * [Runtime config](#user-content-runtime-configuration)
+        * [Custom bundle location](#user-content-custom-bundle-location)
     * [using an Add-on's config](#user-content-add-on-config-vars)
   * [npm Private Packages](#user-content-npm-private-packages)
 * 🕵️ [Troubleshooting](#user-content-troubleshooting)
