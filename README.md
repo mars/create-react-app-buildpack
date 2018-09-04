@@ -181,6 +181,8 @@ To customize an app's processes, commit a `Procfile` and deploy. Include `web: b
 
 The web server may be [configured via the static buildpack](https://github.com/heroku/heroku-buildpack-static#configuration).
 
+The config file `static.json` should be committed at the root of the repo. It will not be recognized, if this file in a sub-directory
+
 The default `static.json`, if it does not exist in the repo, is:
 
 ```json
@@ -195,7 +197,7 @@ If a different web server `"root"` is specified, such as with a highly customize
 
 [React Router](https://github.com/ReactTraining/react-router) (not included) may easily use hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
 
-Create a `static.json` file to configure the web server for clean [`browserHistory` with React Router v3](https://github.com/ReactTraining/react-router/blob/v3/docs/guides/Histories.md#browserhistory) & [`BrowserRouter` with v4](https://reacttraining.com/react-router/web/api/BrowserRouter):
+Create a `static.json` file at the root of the repo to configure the web server for clean [`browserHistory` with React Router v3](https://github.com/ReactTraining/react-router/blob/v3/docs/guides/Histories.md#browserhistory) & [`BrowserRouter` with v4](https://reacttraining.com/react-router/web/api/BrowserRouter):
 
 ```json
 {
