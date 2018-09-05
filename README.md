@@ -1,7 +1,7 @@
 Heroku Buildpack for create-react-app
 =====================================
 
-Deploy React.js web apps generated with [create-react-app](https://github.com/facebookincubator/create-react-app). Automates deployment with the built-in bundler and serves it up via [Nginx](http://nginx.org/en/). See the [introductory blog post](https://blog.heroku.com/deploying-react-with-zero-configuration) and entry in [Heroku elements](https://elements.heroku.com/buildpacks/mars/create-react-app-buildpack).
+Deploy React.js web apps generated with [create-react-app](https://github.com/facebook/create-react-app). Automates deployment with the built-in bundler and serves it up via [Nginx](http://nginx.org/en/). See the [introductory blog post](https://blog.heroku.com/deploying-react-with-zero-configuration) and entry in [Heroku elements](https://elements.heroku.com/buildpacks/mars/create-react-app-buildpack).
 
 * 🚦 [Purpose](#user-content-purpose)
 * ⚠️ [Requirements](#user-content-requires)
@@ -54,18 +54,16 @@ Requires
   * [a free account](https://signup.heroku.com)
 * [git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 * [Node.js](https://nodejs.org)
-* [create-react-app](https://github.com/facebookincubator/create-react-app)
-  * `npm install -g create-react-app`
 
 Quick Start
 -----------
 
 Ensure [requirements](#user-content-requires) are met, then execute the following in a terminal.
 
-✏️ *Replace `$APP_NAME` with a name for your unique app.*
+✏️ *Replace `$APP_NAME` with the name for your unique app.*
 
 ```bash
-create-react-app $APP_NAME
+npx create-react-app $APP_NAME
 cd $APP_NAME
 git init
 heroku create $APP_NAME --buildpack mars/create-react-app
@@ -85,11 +83,14 @@ Usage
 
 ### Generate a React app
 
+✏️ *Replace `$APP_NAME` with the name for your unique app.*
+
 ```bash
-create-react-app my-app
-cd my-app
+npx create-react-app $APP_NAME
+cd $APP_NAME
 ```
 
+* [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f)
 * If [yarn](https://yarnpkg.com) is installed locally, the new app will use it instead of [npm](https://www.npmjs.com).
 
 ### Make it a git repo
@@ -102,17 +103,17 @@ At this point, this new repo is local, only on your computer. Eventually, you ma
 
 ### Create the Heroku app
 
+✏️ *Replace `$APP_NAME` with the name for your unique app.*
+
 ```bash
 heroku create $APP_NAME --buildpack mars/create-react-app
 ```
 
-✏️ *Replace `$APP_NAME` with a name for your unique app.*
-
 This command:
 
 * sets the [app name](https://devcenter.heroku.com/articles/creating-apps#creating-a-named-app) & its URL `https://my-app-name.herokuapp.com`
-* sets the [buildpack](https://devcenter.heroku.com/articles/buildpacks) to deploy a `create-react-app` app
-* configures the [`heroku` remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) in the local git repo, so `git push heroku master` will push to this new Heroku app.
+* sets the app to use this [buildpack](https://devcenter.heroku.com/articles/buildpacks)
+* configures the [`heroku` git remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) in the local repo, so `git push heroku master` will push to this new Heroku app.
 
 ### Commit & deploy ♻️
 
@@ -120,6 +121,14 @@ This command:
 git add .
 git commit -m "Start with create-react-app"
 git push heroku master
+```
+
+…or if you are ever working on a branch other than `master`:
+
+✏️ *Replace `$BRANCH_NAME` with the name for the current branch.*
+
+```bash
+git push heroku $BRANCH_NAME:master
 ```
 
 ### Visit the app's public URL in your browser
