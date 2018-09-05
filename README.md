@@ -111,7 +111,7 @@ heroku create $APP_NAME --buildpack mars/create-react-app
 
 This command:
 
-* sets the [app name](https://devcenter.heroku.com/articles/creating-apps#creating-a-named-app) & its URL `https://my-app-name.herokuapp.com`
+* sets the [app name](https://devcenter.heroku.com/articles/creating-apps#creating-a-named-app) & its default URL `https://$APP_NAME.herokuapp.com`
 * sets the app to use this [buildpack](https://devcenter.heroku.com/articles/buildpacks)
 * configures the [`heroku` git remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) in the local repo, so `git push heroku master` will push to this new Heroku app.
 
