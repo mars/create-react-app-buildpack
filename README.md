@@ -499,7 +499,8 @@ This buildpack combines several buildpacks, specified in [`.buildpacks`](.buildp
      * but forces `NODE_ENV=production` to be `development` to ensure dev dependencies are available for build
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
    * production build for create-react-app
-     * executes the package's build script; create-react-app default is `react-scripts build`
+     * executes the npm package's build script; create-react-app default is `react-scripts build`
+     * exposes `REACT_APP_`, `NODE_`, & `NPM_` prefixed env vars to the build script
      * generates a production bundle regardless of `NODE_ENV` setting
    * sets default [web server config](#user-content-web-server) unless `static.json` already exists
    * enables [runtime environment variables](#user-content-environment-variables)
