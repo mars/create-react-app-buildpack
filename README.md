@@ -476,10 +476,10 @@ This buildpack will never intentionally cause previously deployed apps to become
 [Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock an app to a specific version, if that kind of determinism pleases you:
 
 ```bash
-heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v1.2.1
+heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v5.1.0
 ```
 
-✏️ *Replace `v1.2.1` with the desired [release tag](https://github.com/mars/create-react-app-buildpack/releases).*
+✏️ *Replace `v5.1.0` with the desired [release tag](https://github.com/mars/create-react-app-buildpack/releases).*
 
 ♻️ Then, commit & deploy to rebuild on the new buildpack version.
 
