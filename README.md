@@ -311,7 +311,7 @@ Replace `http://localhost:8000` with the URL to your local or remote backend ser
 
 ### Environment variables
 
-[`REACT_APP_*` environment variables](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) are supported with this buildpack.
+[`REACT_APP_*` environment variables](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) are fully supported with this buildpack.
 
 🚫🤐 ***Not for secrets.** These values may be accessed by anyone who can see the React app.*
 
@@ -349,7 +349,21 @@ ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#user-content-add-on-co
 
 ### Compile-time configuration
 
-Supports `REACT_APP_`, `NODE_`, `NPM_`, & `HEROKU_` prefixed variables.
+Supports [`REACT_APP_`](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables), `NODE_`, `NPM_`, & `HEROKU_` prefixed variables.
+
+Use Node's [`process.env` object](https://nodejs.org/dist/latest-v10.x/docs/api/process.html#process_process_env). During the build, these references will be replaced with their quoted string value.
+
+```javascript
+import React, { Component } from 'react';
+
+class App extends Component {
+  render() {
+    return (
+      <code>Runtime env var example: { process.env.REACT_APP_HELLO }</code>
+    );
+  }
+}
+```
 
 ♻️ The app must be re-deployed for compiled changes to take effect.
 
@@ -362,7 +376,7 @@ git push heroku master
 
 ### Runtime configuration
 
-Supports only `REACT_APP_` prefixed variables.
+Supports only [`REACT_APP_`](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) prefixed variables.
 
 🚫🤐 ***Not for secrets.** These values may be accessed by anyone who can see the React app.*
 
