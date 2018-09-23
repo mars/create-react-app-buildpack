@@ -351,7 +351,7 @@ ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#user-content-add-on-co
 
 Supports [`REACT_APP_`](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables), `NODE_`, `NPM_`, & `HEROKU_` prefixed variables.
 
-Use Node's [`process.env` object](https://nodejs.org/dist/latest-v10.x/docs/api/process.html#process_process_env). During the build, these references will be replaced with their quoted string value.
+Use Node's [`process.env` object](https://nodejs.org/dist/latest-v10.x/docs/api/process.html#process_process_env).
 
 ```javascript
 import React, { Component } from 'react';
@@ -365,13 +365,19 @@ class App extends Component {
 }
 ```
 
-♻️ The app must be re-deployed for compiled changes to take effect.
+♻️ The app must be re-deployed for compiled changes to take effect, because during the build, these references will be replaced with their quoted string value.
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
 
 git commit --allow-empty -m "Set REACT_APP_HELLO config var"
 git push heroku master
+```
+
+Only `REACT_APP_` vars are replaced in create-react-app's build. To make any other variables visible to React, they must be prefixed for the build command in `package.json`, like this:
+
+```bash
+REACT_APP_HEROKU_SLUG_COMMIT=$HEROKU_SLUG_COMMIT react-scripts build
 ```
 
 ### Runtime configuration
