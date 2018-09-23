@@ -311,9 +311,9 @@ Replace `http://localhost:8000` with the URL to your local or remote backend ser
 
 ### Environment variables
 
-[`REACT_APP_*` environment variables](https://github.com/facebookincubator/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) are supported with this buildpack.
+[`REACT_APP_*` environment variables](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) are fully supported with this buildpack.
 
-🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
+🚫🤐 ***Not for secrets.** These values may be accessed by anyone who can see the React app.*
 
 ### [Set vars on Heroku](https://devcenter.heroku.com/articles/config-vars)
 
@@ -349,7 +349,23 @@ ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#user-content-add-on-co
 
 ### Compile-time configuration
 
-♻️ The app must be re-deployed for compiled changes to take effect.
+Supports [`REACT_APP_`](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables), `NODE_`, `NPM_`, & `HEROKU_` prefixed variables.
+
+Use Node's [`process.env` object](https://nodejs.org/dist/latest-v10.x/docs/api/process.html#process_process_env).
+
+```javascript
+import React, { Component } from 'react';
+
+class App extends Component {
+  render() {
+    return (
+      <code>Runtime env var example: { process.env.REACT_APP_HELLO }</code>
+    );
+  }
+}
+```
+
+♻️ The app must be re-deployed for compiled changes to take effect, because during the build, these references will be replaced with their quoted string value.
 
 ```bash
 heroku config:set REACT_APP_HELLO='I love sushi!'
@@ -358,9 +374,17 @@ git commit --allow-empty -m "Set REACT_APP_HELLO config var"
 git push heroku master
 ```
 
+Only `REACT_APP_` vars are replaced in create-react-app's build. To make any other variables visible to React, they must be prefixed for the build command in `package.json`, like this:
+
+```bash
+REACT_APP_HEROKU_SLUG_COMMIT=$HEROKU_SLUG_COMMIT react-scripts build
+```
+
 ### Runtime configuration
 
-*Requires at least create-react-app 0.7.*
+Supports only [`REACT_APP_`](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) prefixed variables.
+
+🚫🤐 ***Not for secrets.** These values may be accessed by anyone who can see the React app.*
 
 Install the [runtime env npm package](https://www.npmjs.com/package/@mars/heroku-js-runtime-env):
 
@@ -407,9 +431,9 @@ heroku config:unset JS_RUNTIME_TARGET_BUNDLE
 
 ### Add-on config vars
 
-🤐 *Be careful not to export secrets. These values may be accessed by anyone who can see the React app.*
+🚫🤐 ***Be careful not to export secrets.** These values may be accessed by anyone who can see the React app.*
 
-Use a custom [`.profile.d` script](https://devcenter.heroku.com/articles/buildpack-api#profile-d-scripts) to make variables visible to the React app by prefixing them with `REACT_APP_`.
+Use a custom [`.profile.d` script](https://devcenter.heroku.com/articles/buildpack-api#profile-d-scripts) to make variables set by other components available to the React app by prefixing them with `REACT_APP_`.
 
 1. create `.profile.d/000-react-app-exports.sh`
 1. make it executable `chmod +x .profile.d/000-react-app-exports.sh`
@@ -476,10 +500,10 @@ This buildpack will never intentionally cause previously deployed apps to become
 [Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock an app to a specific version, if that kind of determinism pleases you:
 
 ```bash
-heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v5.1.0
+heroku buildpacks:set https://github.com/mars/create-react-app-buildpack.git#v6.0.0
 ```
 
-✏️ *Replace `v5.1.0` with the desired [release tag](https://github.com/mars/create-react-app-buildpack/releases).*
+✏️ *Replace `v6.0.0` with the desired [release tag](https://github.com/mars/create-react-app-buildpack/releases).*
 
 ♻️ Then, commit & deploy to rebuild on the new buildpack version.
 
@@ -500,7 +524,7 @@ This buildpack combines several buildpacks, specified in [`.buildpacks`](.buildp
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
    * production build for create-react-app
      * executes the npm package's build script; create-react-app default is `react-scripts build`
-     * exposes `REACT_APP_`, `NODE_`, & `NPM_` prefixed env vars to the build script
+     * exposes `REACT_APP_`, `NODE_`, `NPM_`, & `HEROKU_` prefixed env vars to the build script
      * generates a production bundle regardless of `NODE_ENV` setting
    * sets default [web server config](#user-content-web-server) unless `static.json` already exists
    * enables [runtime environment variables](#user-content-environment-variables)
