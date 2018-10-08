@@ -63,7 +63,7 @@ Ensure [requirements](#user-content-requires) are met, then execute the followin
 ✏️ *Replace `$APP_NAME` with the name for your unique app.*
 
 ```bash
-npx create-react-app@1.5.x $APP_NAME
+npx create-react-app@2.x $APP_NAME
 cd $APP_NAME
 git init
 heroku create $APP_NAME --buildpack mars/create-react-app
@@ -86,13 +86,12 @@ Usage
 ✏️ *Replace `$APP_NAME` with the name for your unique app.*
 
 ```bash
-npx create-react-app@1.5.x $APP_NAME
+npx create-react-app@2.x $APP_NAME
 cd $APP_NAME
 ```
 
 * [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f)
 * if [yarn](https://yarnpkg.com) is installed locally, the new app will use it instead of [npm](https://www.npmjs.com)
-* version 1.5.x is specified because [runtime env vars](#user-content-runtime-configuration) are not yet compatible with version 2.0.x ([issue #131](https://github.com/mars/create-react-app-buildpack/issues/131))
 
 ### Make it a git repo
 
@@ -385,8 +384,6 @@ REACT_APP_HEROKU_SLUG_COMMIT=$HEROKU_SLUG_COMMIT react-scripts build
 
 Supports only [`REACT_APP_`](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) prefixed variables.
 
-🚨 *Not yet compatible with **Create React App 2** ([issue #131](https://github.com/mars/create-react-app-buildpack/issues/131))*
-
 🚫🤐 ***Not for secrets.** These values may be accessed by anyone who can see the React app.*
 
 Install the [runtime env npm package](https://www.npmjs.com/package/@mars/heroku-js-runtime-env):
@@ -423,10 +420,12 @@ If the javascript bundle location is customized, such as with an ejected created
 To solve this so the runtime can locate the bundle, set the custom bundle path:
 
 ```bash
-heroku config:set JS_RUNTIME_TARGET_BUNDLE=/app/my/custom/path/js/main.*.js
+heroku config:set JS_RUNTIME_TARGET_BUNDLE=/app/my/custom/path/js/*.js
 ```
 
-To unset this config and use the default path for **create-react-app**'s bundle, `/app/build/static/js/main.*.js`:
+✳️ *Note this path is a `*` glob, selecting multiple files, because as of create-react-app version 2 the [bundle is split](https://reactjs.org/blog/2018/10/01/create-react-app-v2.html).*
+
+To unset this config and use the default path for **create-react-app**'s bundle, `/app/build/static/js/*.js`:
 
 ```bash
 heroku config:unset JS_RUNTIME_TARGET_BUNDLE
