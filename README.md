@@ -17,7 +17,7 @@ Deploy React.js web apps generated with [create-react-app](https://github.com/fa
 * 👓 [Customization](#user-content-customization)
   * [Procfile](#user-content-procfile)
   * [Web server](#user-content-web-server)
-    * [Routing clean URLs](#user-content-routing-clean-urls)
+    * [Routing](#user-content-routing)
     * [HTTPS-only](#user-content-https-only)
     * [Proxy](#user-content-proxy)
   * [Environment variables](#user-content-environment-variables)
@@ -195,20 +195,6 @@ The config file `static.json` should be committed at the root of the repo. It wi
 The default `static.json`, if it does not exist in the repo, is:
 
 ```json
-{ "root": "build/" }
-```
-
-### Changing the root
-
-If a different web server `"root"` is specified, such as with a highly customized, ejected create-react-app project, then the new bundle location may need to be [set to enable runtime environment variables](#user-content-custom-bundle-location).
-
-### Routing clean URLs
-
-[React Router](https://github.com/ReactTraining/react-router) (not included) may easily use hash-based URLs like `https://example.com/index.html#/users/me/edit`. This is nice & easy when getting started with local development, but for a public app you probably want real URLs like `https://example.com/users/me/edit`.
-
-Create a `static.json` file at the root of the repo to configure the web server for clean [`browserHistory` with React Router v3](https://github.com/ReactTraining/react-router/blob/v3/docs/guides/Histories.md#browserhistory) & [`BrowserRouter` with v4](https://reacttraining.com/react-router/web/api/BrowserRouter):
-
-```json
 {
   "root": "build/",
   "routes": {
@@ -217,7 +203,15 @@ Create a `static.json` file at the root of the repo to configure the web server 
 }
 ```
 
-👓 See [custom routing w/ the static buildpack](https://github.com/heroku/heroku-buildpack-static#custom-routes).
+### Changing the root
+
+If a different web server `"root"` is specified, such as with a highly customized, ejected create-react-app project, then the new bundle location may need to be [set to enable runtime environment variables](#user-content-custom-bundle-location).
+
+### Routing
+
+🚥 ***Client-side routing is supported by default.** Any server request that would result in 404 Not Found returns the React app.*
+
+👓 See [custom routing w/ the static buildpack](https://github.com/heroku/heroku-buildpack-static/blob/master/README.md#user-content-custom-routes).
 
 ### HTTPS-only
 
@@ -226,6 +220,9 @@ Enforce secure connections by automatically redirecting insecure requests to **h
 ```json
 {
   "root": "build/",
+  "routes": {
+    "/**": "index.html"
+  },
   "https_only": true
 }
 ```
@@ -235,16 +232,19 @@ Prevent downgrade attacks with [HTTP strict transport security](https://develope
 ```json
 {
   "root": "build/",
+  "routes": {
+    "/**": "index.html"
+  },
   "https_only": true,
   "headers": {
     "/**": {
-      "Strict-Transport-Security": "max-age=7776000"
+      "Strict-Transport-Security": "max-age=31557600"
     }
   }
 }
 ```
 
-* `max-age` is the number of seconds to enforce HTTPS since the last connection; the example is 90-days
+* `max-age` is the number of seconds to enforce HTTPS since the last connection; the example is one-year
 
 ### Proxy
 
@@ -273,6 +273,9 @@ Add `"proxies"` to `static.json`:
 ```json
 {
   "root": "build/",
+  "routes": {
+    "/**": "index.html"
+  },
   "proxies": {
     "/api/": {
       "origin": "${API_URL}"
