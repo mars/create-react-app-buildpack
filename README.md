@@ -227,7 +227,11 @@ Enforce secure connections by automatically redirecting insecure requests to **h
 }
 ```
 
-Prevent downgrade attacks with [HTTP strict transport security](https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security). Add HSTS `"headers"` to `static.json`:
+#### Strict transport security (HSTS)
+
+Prevent downgrade attacks with [HTTP strict transport security](https://developer.mozilla.org/en-US/docs/Web/Security/HTTP_strict_transport_security). Add HSTS `"headers"` to `static.json`.
+
+⚠️ **Do not set HSTS headers if the app's hostname will not permantly support HTTPS/SSL/TLS.** Once HSTS is set, switching back to plain HTTP will cause security errors in browsers that received the headers, until the max-age is reached. Heroku's built-in `herokuapp.com` hostnames are safe to use with HSTS.
 
 ```json
 {
