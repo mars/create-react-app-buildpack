@@ -31,21 +31,6 @@ branch=""
 dir=$(mktemp -t buildpackXXXXX)
 rm -rf $dir
 
-echo "-----> Configure create-react-app build environment"
-# Set env vars for the inner buildpacks in `.buildpacks`
-# * during compile, install build tooling (devDependencies) with npm & Yarn
-# * in runtime, NODE_ENV is not used (this buildpack launches a static web server)
-export NPM_CONFIG_PRODUCTION=false
-INHERITED_NODE_ENV="${NODE_ENV:-development}"
-if [ "$INHERITED_NODE_ENV" = "production" ]
-  then
-  echo '       Setting `NODE_ENV=development` to install dependencies for `npm build`'
-  export NODE_ENV=development
-else
-  echo "       Using \`NODE_ENV=${INHERITED_NODE_ENV}\`"
-  export NODE_ENV="${INHERITED_NODE_ENV}"
-fi
-
 echo "=====> Downloading Buildpack: $url"
 
 if [[ "$url" =~ \.tgz$ ]] || [[ "$url" =~ \.tgz\? ]]; then
