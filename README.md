@@ -532,10 +532,7 @@ This buildpack combines several buildpacks, specified in [`.buildpacks`](.buildp
      * [executes the npm package's build script](https://devcenter.heroku.com/changelog-items/1557); create-react-app default is `react-scripts build`
      * exposes all env vars to the build script
      * generates a production bundle regardless of `NODE_ENV` setting
-   * `NODE_ENV` at buildtime:
-     * defaults to `NODE_ENV=development` to install the build tooling of create-react-app's dev dependencies, like `react-scripts`
-     * honors specific setting of `NODE_ENV`, like `NODE_ENV=test` for [automated testing](#user-content-testing) in [`bin/test`](bin/test-compile)
-     * but forces `NODE_ENV=production` to be `development` to ensure dev dependencies are available for build
+     * customize further with [Node.js build configuration](https://devcenter.heroku.com/articles/nodejs-support#customizing-the-build-process)
 2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
    * sets default [web server config](#user-content-web-server) unless `static.json` already exists
    * enables [runtime environment variables](#user-content-environment-variables)
