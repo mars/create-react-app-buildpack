@@ -3,7 +3,7 @@ Heroku Buildpack for create-react-app
 
 Deploy React.js web apps generated with [create-react-app](https://github.com/facebook/create-react-app). Automates deployment with the built-in bundler and serves it up via [Nginx](http://nginx.org/en/). See the [introductory blog post](https://blog.heroku.com/deploying-react-with-zero-configuration) and entry in [Heroku elements](https://elements.heroku.com/buildpacks/mars/create-react-app-buildpack).
 
-👉 *An [upcoming change](https://devcenter.heroku.com/changelog-items/1557) to the official Node.js buildpack affects this buildpack. **No changes are required to apps using this buildpack.** See [#156 Deploy with Auto Build](https://github.com/mars/create-react-app-buildpack/pull/156) for information about the transition on **March 11, 2019**, when new deployments may briefly be broken.*
+👉 *An [upcoming change](https://devcenter.heroku.com/changelog-items/1557) to the official Node.js buildpack affects this buildpack. **No changes are required to apps using this buildpack.** See [#156 Deploy with Auto Build](https://github.com/mars/create-react-app-buildpack/pull/156) for information about the transition on **March 11, 2019**.*
 
 * 🚦 [Purpose](#user-content-purpose)
 * ⚠️ [Requirements](#user-content-requires)
