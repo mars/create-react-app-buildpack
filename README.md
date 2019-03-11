@@ -358,7 +358,9 @@ ex: `REACT_APP_FILEPICKER_API_KEY` ([Add-on config vars](#user-content-add-on-co
 
 ### Compile-time configuration
 
-Supports [`REACT_APP_`](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables), `NODE_`, `NPM_`, & `HEROKU_` prefixed variables.
+Supports all config vars, including [`REACT_APP_`](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables), `NODE_`, `NPM_`, & `HEROKU_` prefixed variables.
+
+☝️🤐 ***Use secrets carefully.** If these values are embedded in the JavaScript bundle, like with `REACT_APP_` vars, then they may be accessed by anyone who can see the React app.*
 
 Use Node's [`process.env` object](https://nodejs.org/dist/latest-v10.x/docs/api/process.html#process_process_env).
 
@@ -528,15 +530,12 @@ This buildpack combines several buildpacks, specified in [`.buildpacks`](.buildp
    * installs `node`, puts on the `$PATH`
    * version specified in [`package.json`, `engines.node`](https://devcenter.heroku.com/articles/nodejs-support#specifying-a-node-js-version)
    * `node_modules/` cached between deployments
-   * `NODE_ENV` at buildtime:
-     * defaults to `NODE_ENV=development` to install the build tooling of create-react-app's dev dependencies, like `react-scripts`
-     * honors specific setting of `NODE_ENV`, like `NODE_ENV=test` for [automated testing](#user-content-testing) in [`bin/test`](bin/test-compile)
-     * but forces `NODE_ENV=production` to be `development` to ensure dev dependencies are available for build
-2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
    * production build for create-react-app
-     * executes the npm package's build script; create-react-app default is `react-scripts build`
-     * exposes `REACT_APP_`, `NODE_`, `NPM_`, & `HEROKU_` prefixed env vars to the build script
+     * [executes the npm package's build script](https://devcenter.heroku.com/changelog-items/1557); create-react-app default is `react-scripts build`
+     * exposes all env vars to the build script
      * generates a production bundle regardless of `NODE_ENV` setting
+     * customize further with [Node.js build configuration](https://devcenter.heroku.com/articles/nodejs-support#customizing-the-build-process)
+2. [`mars/create-react-app-inner-buildpack`](https://github.com/mars/create-react-app-inner-buildpack)
    * sets default [web server config](#user-content-web-server) unless `static.json` already exists
    * enables [runtime environment variables](#user-content-environment-variables)
 3. [`heroku/static` buildpack](https://github.com/heroku/heroku-buildpack-static)
