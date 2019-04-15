@@ -321,7 +321,7 @@ Replace `http://localhost:8000` with the URL to your local or remote backend ser
 
 ### Environment variables
 
-[`REACT_APP_*` environment variables](https://github.com/facebook/create-react-app/blob/master/packages/react-scripts/template/README.md#adding-custom-environment-variables) are fully supported with this buildpack.
+[`REACT_APP_*` environment variables](https://facebook.github.io/create-react-app/docs/adding-custom-environment-variables) are fully supported with this buildpack.
 
 🚫🤐 ***Not for secrets.** These values may be accessed by anyone who can see the React app.*
 
