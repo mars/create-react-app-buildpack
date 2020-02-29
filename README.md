@@ -64,12 +64,9 @@ Ensure [requirements](#user-content-requires) are met, then execute the followin
 ✏️ *Replace `$APP_NAME` with the name for your unique app.*
 
 ```bash
-npx create-react-app@2.x $APP_NAME
+npx create-react-app@3.x $APP_NAME
 cd $APP_NAME
-git init
 heroku create $APP_NAME --buildpack mars/create-react-app
-git add .
-git commit -m "Start with create-react-app"
 git push heroku master
 heroku open
 ```
@@ -87,20 +84,13 @@ Usage
 ✏️ *Replace `$APP_NAME` with the name for your unique app.*
 
 ```bash
-npx create-react-app@2.x $APP_NAME
+npx create-react-app@3.x $APP_NAME
 cd $APP_NAME
 ```
 
+* as of create-react-app v3, it automatically performs `git init` and an initial commit
 * [npx](https://medium.com/@maybekatz/introducing-npx-an-npm-package-runner-55f7d4bd282b) comes with npm 5.2+ and higher, see [instructions for older npm versions](https://gist.github.com/gaearon/4064d3c23a77c74a3614c498a8bb1c5f)
 * if [yarn](https://yarnpkg.com) is installed locally, the new app will use it instead of [npm](https://www.npmjs.com)
-
-### Make it a git repo
-
-```bash
-git init
-```
-
-At this point, this new repo is local, only on your computer. Eventually, you may want to [push to Github](#user-content-push-to-github).
 
 ### Create the Heroku app
 
@@ -116,11 +106,9 @@ This command:
 * sets the app to use this [buildpack](https://devcenter.heroku.com/articles/buildpacks)
 * configures the [`heroku` git remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) in the local repo, so `git push heroku master` will push to this new Heroku app.
 
-### Commit & deploy ♻️
+### Deploy ♻️
 
 ```bash
-git add .
-git commit -m "Start with create-react-app"
 git push heroku master
 ```
 
@@ -146,7 +134,7 @@ Find the app on [your dashboard](https://dashboard.heroku.com).
 
 Work with your app locally using `npm start`. See: [create-react-app docs](https://github.com/facebookincubator/create-react-app#getting-started)
 
-Then, commit & deploy ♻️
+Then, `git commit` your changes & `git push heroku master` ♻️
 
 ### Push to Github
 
