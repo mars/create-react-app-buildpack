@@ -67,7 +67,7 @@ Ensure [requirements](#user-content-requires) are met, then execute the followin
 npx create-react-app@3.x $APP_NAME
 cd $APP_NAME
 heroku create $APP_NAME --buildpack mars/create-react-app
-git push heroku master
+git push heroku main
 heroku open
 ```
 
@@ -104,20 +104,20 @@ This command:
 
 * sets the [app name](https://devcenter.heroku.com/articles/creating-apps#creating-a-named-app) & its default URL `https://$APP_NAME.herokuapp.com`
 * sets the app to use this [buildpack](https://devcenter.heroku.com/articles/buildpacks)
-* configures the [`heroku` git remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) in the local repo, so `git push heroku master` will push to this new Heroku app.
+* configures the [`heroku` git remote](https://devcenter.heroku.com/articles/git#creating-a-heroku-remote) in the local repo, so `git push heroku main` will push to this new Heroku app.
 
 ### Deploy ♻️
 
 ```bash
-git push heroku master
+git push heroku main
 ```
 
-…or if you are ever working on a branch other than `master`:
+…or if you are ever working on a branch other than `main`:
 
 ✏️ *Replace `$BRANCH_NAME` with the name for the current branch.*
 
 ```bash
-git push heroku $BRANCH_NAME:master
+git push heroku $BRANCH_NAME:main
 ```
 
 ### Visit the app's public URL in your browser
@@ -134,7 +134,7 @@ Find the app on [your dashboard](https://dashboard.heroku.com).
 
 Work with your app locally using `npm start`. See: [create-react-app docs](https://github.com/facebookincubator/create-react-app#getting-started)
 
-Then, `git commit` your changes & `git push heroku master` ♻️
+Then, `git commit` your changes & `git push heroku main` ♻️
 
 ### Push to Github
 
@@ -369,7 +369,7 @@ class App extends Component {
 heroku config:set REACT_APP_HELLO='I love sushi!'
 
 git commit --allow-empty -m "Set REACT_APP_HELLO config var"
-git push heroku master
+git push heroku main
 ```
 
 Only `REACT_APP_` vars are replaced in create-react-app's build. To make any other variables visible to React, they must be prefixed for the build command in `package.json`, like this:
@@ -480,7 +480,7 @@ Troubleshooting
 
     ```bash
     git commit --allow-empty -m 'Switch to create-react-app-buildpack'
-    git push heroku master
+    git push heroku main
     ```
     
     If the error still occurs, then at least we know it's really using this buildpack! Proceed with troubleshooting.
@@ -495,7 +495,7 @@ Troubleshooting
 Version compatibility
 ---------------------
 
-This buildpack will never intentionally cause previously deployed apps to become undeployable. Using master [as directed in the main instructions](#user-content-create-the-heroku-app) will always deploy an app with the most recent version of this buildpack.
+This buildpack will never intentionally cause previously deployed apps to become undeployable. Using main [as directed in the main instructions](#user-content-create-the-heroku-app) will always deploy an app with the most recent version of this buildpack.
 
 [Releases are tagged](https://github.com/mars/create-react-app-buildpack/releases), so you can lock an app to a specific version, if that kind of determinism pleases you:
 
