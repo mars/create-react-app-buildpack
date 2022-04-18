@@ -1,3 +1,3 @@
-https://github.com/Airbase/heroku-buildpack-nodejs.git
+https://github.com/Airbase/heroku-buildpack-nodejs/tree/pnpm-install
 https://github.com/mars/create-react-app-inner-buildpack.git#v9.0.0
 https://github.com/Airbase/heroku-buildpack-static.git
