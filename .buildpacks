@@ -1,3 +1,3 @@
 https://github.com/heroku/heroku-buildpack-nodejs.git
 https://github.com/mars/create-react-app-inner-buildpack.git#v9.0.0
-https://github.com/heroku/heroku-buildpack-static.git
+https://github.com/heroku/heroku-buildpack-static.git#21c1f5175186b70cf247384fd0bf922504b419be
